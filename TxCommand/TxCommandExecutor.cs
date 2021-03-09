@@ -128,7 +128,7 @@ namespace TxCommand
                 return;
             }
 
-            Rollback();
+            Commit();
             _transaction?.Dispose();
             _disposed = true;
         }

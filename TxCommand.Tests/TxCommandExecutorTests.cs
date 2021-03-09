@@ -13,14 +13,12 @@ namespace TxCommand.Tests
         public void Constructor_GivenConnection_BeginsTransaction()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-            connection.Setup(x => x.Open()).Verifiable();
-
-            var transaction = Mock.Of<IDbTransaction>();
-            connection.Setup(x => x.BeginTransaction()).Returns(transaction).Verifiable();
+            connection.SetupGet(x => x.State).Returns(ConnectionState.Open).Verifiable();
+            connection.Setup(x => x.BeginTransaction()).Returns(Mock.Of<IDbTransaction>()).Verifiable();
 
             _ = new TxCommandExecutor(connection.Object);
 
+            connection.VerifyGet(x => x.State, Times.Once);
             connection.Verify(x => x.Open(), Times.Never);
             connection.Verify(x => x.BeginTransaction(), Times.Once);
         }
@@ -29,11 +27,7 @@ namespace TxCommand.Tests
         public void Constructor_GivenClosedConnection_OpensConnection()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Closed);
-            connection.Setup(x => x.Open()).Verifiable();
-
-            var transaction = Mock.Of<IDbTransaction>();
-            connection.Setup(x => x.BeginTransaction()).Returns(transaction).Verifiable();
+            connection.Setup(x => x.BeginTransaction()).Returns(Mock.Of<IDbTransaction>()).Verifiable();
 
             _ = new TxCommandExecutor(connection.Object);
 
@@ -48,7 +42,6 @@ namespace TxCommand.Tests
             transaction.Setup(x => x.Commit()).Verifiable();
 
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
@@ -60,13 +53,8 @@ namespace TxCommand.Tests
         [Fact]
         public void Commit_WithDisposedCommandExecutor_ThrowsObjectDisposedException()
         {
-            var transaction = new Mock<IDbTransaction>();
-            transaction.Setup(x => x.Rollback());
-            transaction.Setup(x => x.Dispose());
-
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-            connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
+            connection.Setup(x => x.BeginTransaction()).Returns(Mock.Of<IDbTransaction>());
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             commandExecutor.Dispose();
@@ -81,7 +69,6 @@ namespace TxCommand.Tests
             transaction.Setup(x => x.Rollback()).Verifiable();
 
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
@@ -93,13 +80,8 @@ namespace TxCommand.Tests
         [Fact]
         public void Rollback_WithDisposedCommandExecutor_ThrowsObjectDisposedException()
         {
-            var transaction = new Mock<IDbTransaction>();
-            transaction.Setup(x => x.Rollback());
-            transaction.Setup(x => x.Dispose());
-
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-            connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
+            connection.Setup(x => x.BeginTransaction()).Returns(Mock.Of<IDbTransaction>());
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             commandExecutor.Dispose();
@@ -111,8 +93,6 @@ namespace TxCommand.Tests
         public async Task ExecuteAsync_GivenCommand_ExecutesTheCommand()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = Mock.Of<IDbTransaction>();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction);
 
@@ -129,8 +109,6 @@ namespace TxCommand.Tests
         public async Task ExecuteAsync_GivenNullCommand_ThrowsArgumentNullException()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = Mock.Of<IDbTransaction>();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction);
 
@@ -146,11 +124,7 @@ namespace TxCommand.Tests
         public async Task ExecuteAsync_WithDisposedCommandExecutor_ThrowsObjectDisposedException()
         {
             var transaction = new Mock<IDbTransaction>();
-            transaction.Setup(x => x.Rollback());
-            transaction.Setup(x => x.Dispose());
-
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
             var command = new Mock<ITxCommand>();
@@ -170,8 +144,6 @@ namespace TxCommand.Tests
         public async Task ExecuteAsync_WhereCommandThrowsException_RollsBackAndThrows()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-            
             var transaction = new Mock<IDbTransaction>();
             transaction.Setup(x => x.Rollback()).Verifiable();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
@@ -196,8 +168,6 @@ namespace TxCommand.Tests
             const string testResult = "Test";
 
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = Mock.Of<IDbTransaction>();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction);
 
@@ -215,8 +185,6 @@ namespace TxCommand.Tests
         public async Task ExecuteAsyncWithResult_GivenNullCommand_ThrowsArgumentNullException()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = Mock.Of<IDbTransaction>();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction);
 
@@ -234,9 +202,6 @@ namespace TxCommand.Tests
             const string testResult = "Test";
 
             var transaction = new Mock<IDbTransaction>();
-            transaction.Setup(x => x.Rollback());
-            transaction.Setup(x => x.Dispose());
-
             var connection = new Mock<IDbConnection>();
             connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
@@ -258,8 +223,6 @@ namespace TxCommand.Tests
         public async Task ExecuteAsyncWithResult_WhereCommandThrowsException_RollsBackAndThrows()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = new Mock<IDbTransaction>();
             transaction.Setup(x => x.Rollback()).Verifiable();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
@@ -279,20 +242,18 @@ namespace TxCommand.Tests
         }
 
         [Fact]
-        public void Dispose_GivenIndisposedCommandExecutor_RollsBackAndDisposesTransaction()
+        public void Dispose_GivenIndisposedCommandExecutor_CommitsAndDisposesTransaction()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = new Mock<IDbTransaction>();
-            transaction.Setup(x => x.Rollback()).Verifiable();
+            transaction.Setup(x => x.Commit()).Verifiable();
             transaction.Setup(x => x.Dispose()).Verifiable();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             commandExecutor.Dispose();
 
-            transaction.Verify(x => x.Rollback(), Times.Once);
+            transaction.Verify(x => x.Commit(), Times.Once);
             transaction.Verify(x => x.Dispose(), Times.Once);
         }
 
@@ -300,10 +261,8 @@ namespace TxCommand.Tests
         public void Dispose_GivenDisposedCommandExecutor_DoesNothing()
         {
             var connection = new Mock<IDbConnection>();
-            connection.SetupGet(x => x.State).Returns(ConnectionState.Open);
-
             var transaction = new Mock<IDbTransaction>();
-            transaction.Setup(x => x.Rollback()).Verifiable();
+            transaction.Setup(x => x.Commit()).Verifiable();
             transaction.Setup(x => x.Dispose()).Verifiable();
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
@@ -314,7 +273,7 @@ namespace TxCommand.Tests
             commandExecutor.Dispose();
 
             // Ensure transaction is only called in setup dispose call.
-            transaction.Verify(x => x.Rollback(), Times.Once);
+            transaction.Verify(x => x.Commit(), Times.Once);
             transaction.Verify(x => x.Dispose(), Times.Once);
         }
     }

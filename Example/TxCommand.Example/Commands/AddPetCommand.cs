@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Data;
 using System.Threading.Tasks;
 using TxCommand.Abstractions;
@@ -21,6 +22,19 @@ namespace TxCommand.Example.Commands
             const string query = "INSERT INTO [Pets] ([PersonId],[Name]) VALUES (@PersonId,@PetName)";
 
             await transaction.Connection.ExecuteAsync(query, new {PersonId, PetName}, transaction);
+        }
+
+        public void Validate()
+        {
+            if (PersonId < 1)
+            {
+                throw new ArgumentException("PersonId must be at least 1", nameof(PersonId));
+            }
+
+            if (string.IsNullOrEmpty(PetName))
+            {
+                throw new ArgumentException("Pet name can not be empty", nameof(PetName));
+            }
         }
     }
 }

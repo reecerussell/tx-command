@@ -63,6 +63,8 @@ namespace TxCommand
         /// <summary>
         /// Executes the given <see cref="ITxCommand"/>, <paramref name="command"/>, within the bounds of the current transaction.
         /// If an exception is thrown while executing <paramref name="command"/>, the current transaction will be rolled back.
+        ///
+        /// Validates <paramref name="command"/> before executing.
         /// </summary>
         /// <param name="command">The command to execute.</param>
         /// <returns></returns>
@@ -82,6 +84,7 @@ namespace TxCommand
 
             try
             {
+                command.Validate();
                 await command.ExecuteAsync(_transaction);
             }
             catch
@@ -95,6 +98,8 @@ namespace TxCommand
         /// <summary>
         /// Executes the given <see cref="ITxCommand"/>, <paramref name="command"/>, within the bounds of the current transaction.
         /// If an exception is thrown while executing <paramref name="command"/>, the current transaction will be rolled back.
+        ///
+        /// Validates <paramref name="command"/> before executing.
         /// </summary>
         /// <param name="command">The command to execute.</param>
         /// <returns>Returns the output of <paramref name="command"/>.</returns>
@@ -114,6 +119,7 @@ namespace TxCommand
 
             try
             {
+                command.Validate();
                 return await command.ExecuteAsync(_transaction);
             }
             catch

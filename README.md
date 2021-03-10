@@ -68,3 +68,16 @@ public class CreatePersonService : IDisposable
     }
 }
 ```
+
+## Dependency Injection
+
+If you're using `Microsoft.Extensions.DependencyInjection` for dependency injection, `AddTxCommand()` can be called on a `IServiceCollection`.
+
+```csharp
+var services = new ServiceCollection()
+    .AddTxCommand()
+    .BuildServiceProvider();
+
+var factory = services.GetRequiredService<ITxCommandExecutorFactory>();
+var executor = services.GetRequiredService<ITxCommandExecutor>();
+```

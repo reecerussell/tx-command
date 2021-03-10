@@ -97,11 +97,13 @@ namespace TxCommand.Tests
             connection.Setup(x => x.BeginTransaction()).Returns(transaction);
 
             var command = new Mock<ITxCommand>();
+            command.Setup(x => x.Validate()).Verifiable();
             command.Setup(x => x.ExecuteAsync(transaction)).Returns(Task.CompletedTask).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             await commandExecutor.ExecuteAsync(command.Object);
 
+            command.Verify(x => x.Validate(), Times.Once);
             command.Verify(x => x.ExecuteAsync(transaction), Times.Once);
         }
 
@@ -163,6 +165,29 @@ namespace TxCommand.Tests
         }
 
         [Fact]
+        public async Task ExecuteAsync_WhereValidationFails_RollsBackAndThrows()
+        {
+            var connection = new Mock<IDbConnection>();
+            var transaction = new Mock<IDbTransaction>();
+            transaction.Setup(x => x.Rollback()).Verifiable();
+            connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
+
+            var command = new Mock<ITxCommand>();
+            var testException = new Exception("Test");
+            command.Setup(x => x.Validate()).Throws(testException).Verifiable();
+
+            var commandExecutor = new TxCommandExecutor(connection.Object);
+
+            var ex = await Assert.ThrowsAsync<Exception>(
+                async () => await commandExecutor.ExecuteAsync(command.Object));
+            Assert.Equal(ex, testException);
+
+            transaction.Verify(x => x.Rollback(), Times.Once);
+            command.Verify(x => x.Validate(), Times.Once);
+            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Never);
+        }
+
+        [Fact]
         public async Task ExecuteAsyncWithResult_GivenCommand_ExecutesTheCommand()
         {
             const string testResult = "Test";
@@ -172,12 +197,14 @@ namespace TxCommand.Tests
             connection.Setup(x => x.BeginTransaction()).Returns(transaction);
 
             var command = new Mock<ITxCommand<string>>();
+            command.Setup(x => x.Validate()).Verifiable();
             command.Setup(x => x.ExecuteAsync(transaction)).ReturnsAsync(testResult).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             var result = await commandExecutor.ExecuteAsync(command.Object);
             Assert.Equal(testResult, result);
 
+            command.Verify(x => x.Validate(), Times.Once);
             command.Verify(x => x.ExecuteAsync(transaction), Times.Once);
         }
 
@@ -239,6 +266,29 @@ namespace TxCommand.Tests
 
             transaction.Verify(x => x.Rollback(), Times.Once);
             command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Once);
+        }
+
+        [Fact]
+        public async Task ExecuteAsyncWithResult_WhereValidationFails_RollsBackAndThrows()
+        {
+            var connection = new Mock<IDbConnection>();
+            var transaction = new Mock<IDbTransaction>();
+            transaction.Setup(x => x.Rollback()).Verifiable();
+            connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
+
+            var command = new Mock<ITxCommand<string>>();
+            var testException = new Exception("Test");
+            command.Setup(x => x.Validate()).Throws(testException).Verifiable();
+
+            var commandExecutor = new TxCommandExecutor(connection.Object);
+
+            var ex = await Assert.ThrowsAsync<Exception>(
+                async () => await commandExecutor.ExecuteAsync(command.Object));
+            Assert.Equal(ex, testException);
+
+            transaction.Verify(x => x.Rollback(), Times.Once);
+            command.Verify(x => x.Validate(), Times.Once);
+            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Never);
         }
 
         [Fact]

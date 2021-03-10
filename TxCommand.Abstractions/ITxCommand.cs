@@ -17,6 +17,11 @@ namespace TxCommand.Abstractions
         /// <param name="transaction">A database transaction for the current scope.</param>
         /// <returns></returns>
         Task ExecuteAsync(IDbTransaction transaction);
+
+        /// <summary>
+        /// Validates the command before execution, ensuring the command contains valid arguments.
+        /// </summary>
+        void Validate();
     }
 
     /// <summary>
@@ -37,5 +42,10 @@ namespace TxCommand.Abstractions
         /// <param name="transaction">A database transaction for the current scope.</param>
         /// <returns></returns>
         Task<TResult> ExecuteAsync(IDbTransaction transaction);
+
+        /// <summary>
+        /// Validates the command before execution, ensuring the command contains valid arguments.
+        /// </summary>
+        void Validate();
     }
 }

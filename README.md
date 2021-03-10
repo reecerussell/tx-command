@@ -39,12 +39,7 @@ public class PetService
 Here is an example of a transient service, `CreatePersonService`. This should be initialised on a per-use basis, as it has a command executor as a dependency.
 
 ```csharp
-public interface ICreatePersonService : IDisposable
-{
-    Task<int> Create(string personName, string petName);
-}
-
-public class CreatePersonService : ICreatePersonService
+public class CreatePersonService : IDisposable
 {
     private readonly ITxCommandExecutor _executor;
 

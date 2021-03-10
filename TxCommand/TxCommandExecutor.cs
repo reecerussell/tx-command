@@ -13,6 +13,7 @@ namespace TxCommand
         private readonly IDbTransaction _transaction;
 
         private bool _disposed = false;
+        private bool _completed = false;
 
         /// <summary>
         /// Initializes a new instance of <see cref="TxCommandExecutor"/>. If the given <see cref="IDbConnection"/>,
@@ -41,6 +42,7 @@ namespace TxCommand
             }
 
             _transaction.Commit();
+            _completed = true;
         }
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace TxCommand
             }
 
             _transaction.Rollback();
+            _completed = true;
         }
 
         /// <summary>
@@ -128,7 +131,11 @@ namespace TxCommand
                 return;
             }
 
-            Rollback();
+            if (!_completed)
+            {
+                Commit();
+            }
+
             _transaction?.Dispose();
             _disposed = true;
         }

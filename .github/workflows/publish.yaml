@@ -7,15 +7,15 @@ on:
     branches:
       - master
     paths:
-      - "*.cs"
-      - "*.csproj"
+      - "**.cs"
+      - "*/*.csproj"
       - "*.sln"
       - ".github/*"
 
   pull_request:
     paths:
-      - "*.cs"
-      - "*.csproj"
+      - "**.cs"
+      - "*/*.csproj"
       - "*.sln"
       - ".github/*"
 

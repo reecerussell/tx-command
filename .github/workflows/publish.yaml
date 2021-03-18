@@ -2,22 +2,10 @@ name: Publish
 
 on:
   workflow_dispatch:
-
   push:
     branches:
       - master
-    paths:
-      - "**.cs"
-      - "*/*.csproj"
-      - "*.sln"
-      - ".github/*"
-
   pull_request:
-    paths:
-      - "**.cs"
-      - "*/*.csproj"
-      - "*.sln"
-      - ".github/*"
 
 jobs:
   build:

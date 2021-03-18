@@ -6,6 +6,7 @@ on:
       - "*.cs"
       - "*.csproj"
       - "*.sln"
+      - "*.yaml"
     branches:
       - master
 
@@ -14,6 +15,7 @@ on:
       - "*.cs"
       - "*.csproj"
       - "*.sln"
+      - "*.yaml"
 
 jobs:
   build:

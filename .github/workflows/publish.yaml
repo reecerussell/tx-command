@@ -55,6 +55,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Pull Database Image
+        run: docker pull mcr.microsoft.com/mssql/server:2017-CU17-ubuntu
+
       - name: Restore
         run: dotnet restore Example/TxCommand.Example.IntegrationTests/TxCommand.Example.IntegrationTests.csproj
 

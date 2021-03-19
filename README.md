@@ -1,6 +1,18 @@
+![Actions](https://github.com/reecerussell/tx-command/actions/workflows/publish.yaml/badge.svg)
+[![codecov](https://codecov.io/gh/reecerussell/tx-command/branch/master/graph/badge.svg?token=2o5osNgjr8)](https://codecov.io/gh/reecerussell/tx-command)
+[![CodeFactor](https://www.codefactor.io/repository/github/reecerussell/tx-command/badge)](https://www.codefactor.io/repository/github/reecerussell/tx-command)
+![Nuget](https://img.shields.io/nuget/v/TxCommand)
+[![Nuget](https://img.shields.io/nuget/dt/TxCommand)](https://www.nuget.org/packages/TxCommand/)
+
+
 # TxCommand
 
 A simple commanding library with support for executing commands within a database transaction.
+
+|Package | Version| Downloads|
+|--------|--------|---|
+|TxCommand|![Nuget](https://img.shields.io/nuget/v/TxCommand)|[![Nuget](https://img.shields.io/nuget/dt/TxCommand)](https://www.nuget.org/packages/TxCommand/)
+|TxCommand.Abstractions|![Nuget](https://img.shields.io/nuget/v/TxCommand.Abstractions)|[![Nuget](https://img.shields.io/nuget/dt/TxCommand.Abstractions)](https://www.nuget.org/packages/TxCommand.Abstractions/)|
 
 ## Usage
 

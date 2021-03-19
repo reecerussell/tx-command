@@ -9,6 +9,11 @@
 
 A simple commanding library with support for executing commands within a database transaction.
 
+|Package | Version| Downloads|
+|--------|--------|---|
+|TxCommand|![Nuget](https://img.shields.io/nuget/v/TxCommand)|[![Nuget](https://img.shields.io/nuget/dt/TxCommand)](https://www.nuget.org/packages/TxCommand/)
+|TxCommand.Abstractions|![Nuget](https://img.shields.io/nuget/v/TxCommand.Abstractions)|[![Nuget](https://img.shields.io/nuget/dt/TxCommand.Abstractions)](https://www.nuget.org/packages/TxCommand.Abstractions/)|
+
 ## Usage
 
 Commands are executed with a CommandExecutor, which provides a database transaction. CommandExecutors are a single use object and should be used for a specific set of operations.

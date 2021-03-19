@@ -2,3 +2,7 @@
 **/bin/*
 **/obj/*
 *.user
+
+TxCommand.Tests/coverage.json
+TxCommand.Tests/coverage.cobertura.xml
+TxCommand.Tests/TestResults

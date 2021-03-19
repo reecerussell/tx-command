@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,11 +32,7 @@ jobs:
         run: dotnet build -c Release --no-restore TxCommand.Abstractions/TxCommand.Abstractions.csproj
 
       - name: Unit Test
-        run: dotnet test --no-restore \
-          -c Release \
-          /p:CollectCoverage=true \
-          /p:CoverletOutputFormat=cobertura \
-          TxCommand.Tests/TxCommand.Tests.csproj
+        run: dotnet test --no-restore -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura TxCommand.Tests/TxCommand.Tests.csproj
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v1

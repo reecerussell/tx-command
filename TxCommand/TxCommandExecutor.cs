@@ -91,7 +91,7 @@ namespace TxCommand
             try
             {
                 command.Validate();
-                await command.ExecuteAsync(_transaction);
+                await command.ExecuteAsync(_connection, _transaction);
             }
             catch
             {
@@ -137,7 +137,7 @@ namespace TxCommand
             try
             {
                 command.Validate();
-                return await command.ExecuteAsync(_transaction);
+                return await command.ExecuteAsync(_connection, _transaction);
             }
             catch
             {

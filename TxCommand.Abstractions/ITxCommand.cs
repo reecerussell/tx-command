@@ -14,9 +14,10 @@ namespace TxCommand.Abstractions
         /// Executes the implementing command, providing a <see cref="IDbTransaction"/>, allowing
         /// the command to execute database operations within the bounds of a transaction.
         /// </summary>
+        /// <param name="connection">A database connection.</param>
         /// <param name="transaction">A database transaction for the current scope.</param>
         /// <returns></returns>
-        Task ExecuteAsync(IDbTransaction transaction);
+        Task ExecuteAsync(IDbConnection connection, IDbTransaction transaction);
 
         /// <summary>
         /// Validates the command before execution, ensuring the command contains valid arguments.
@@ -39,9 +40,10 @@ namespace TxCommand.Abstractions
         /// Executes the implementing command, providing a <see cref="IDbTransaction"/>, allowing
         /// the command to execute database operations within the bounds of a transaction.
         /// </summary>
+        /// <param name="connection">A database connection.</param>
         /// <param name="transaction">A database transaction for the current scope.</param>
         /// <returns></returns>
-        Task<TResult> ExecuteAsync(IDbTransaction transaction);
+        Task<TResult> ExecuteAsync(IDbConnection connection, IDbTransaction transaction);
 
         /// <summary>
         /// Validates the command before execution, ensuring the command contains valid arguments.

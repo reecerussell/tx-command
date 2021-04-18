@@ -10,24 +10,19 @@ namespace TxCommand
     /// </summary>
     public class TxCommandExecutor : ITxCommandExecutor
     {
-        private readonly IDbTransaction _transaction;
+        private readonly IDbConnection _connection;
+        private IDbTransaction _transaction;
 
         private bool _disposed = false;
-        private bool _completed = false;
+        private bool _completed = true;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="TxCommandExecutor"/>. If the given <see cref="IDbConnection"/>,
-        /// <paramref name="connection"/> is closed, an attempt will be made to establish a connection.
+        /// Initializes a new instance of <see cref="TxCommandExecutor"/>.
         /// </summary>
         /// <param name="connection">The backing connection to the transaction.</param>
         public TxCommandExecutor(IDbConnection connection)
         {
-            if (connection.State == ConnectionState.Closed)
-            {
-                connection.Open();
-            }
-
-            _transaction = connection.BeginTransaction();
+            _connection = connection;
         }
 
         /// <summary>
@@ -41,7 +36,7 @@ namespace TxCommand
                 throw new ObjectDisposedException(nameof(TxCommandExecutor));
             }
 
-            _transaction.Commit();
+            _transaction?.Commit();
             _completed = true;
         }
 
@@ -56,7 +51,7 @@ namespace TxCommand
                 throw new ObjectDisposedException(nameof(TxCommandExecutor));
             }
 
-            _transaction.Rollback();
+            _transaction?.Rollback();
             _completed = true;
         }
 
@@ -80,6 +75,17 @@ namespace TxCommand
             if (_disposed)
             {
                 throw new ObjectDisposedException(nameof(TxCommandExecutor));
+            }
+
+            if (_connection.State == ConnectionState.Closed)
+            {
+                _connection.Open();
+            }
+
+            if (_transaction == null)
+            {
+                _transaction = _connection.BeginTransaction();
+                _completed = false;
             }
 
             try
@@ -115,6 +121,17 @@ namespace TxCommand
             if (_disposed)
             {
                 throw new ObjectDisposedException(nameof(TxCommandExecutor));
+            }
+
+            if (_connection.State == ConnectionState.Closed)
+            {
+                _connection.Open();
+            }
+
+            if (_transaction == null)
+            {
+                _transaction = _connection.BeginTransaction();
+                _completed = false;
             }
 
             try

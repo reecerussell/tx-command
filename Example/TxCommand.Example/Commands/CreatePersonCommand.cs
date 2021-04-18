@@ -15,11 +15,11 @@ namespace TxCommand.Example.Commands
             Name = name;
         }
 
-        public async Task<int> ExecuteAsync(IDbTransaction transaction)
+        public async Task<int> ExecuteAsync(IDbConnection connection, IDbTransaction transaction)
         {
             const string query = "INSERT INTO [People] ([Name]) VALUES (@Name); SELECT SCOPE_IDENTITY();";
 
-            return await transaction.Connection.ExecuteScalarAsync<int>(query, new {Name}, transaction);
+            return await connection.ExecuteScalarAsync<int>(query, new {Name}, transaction);
         }
 
         public void Validate()

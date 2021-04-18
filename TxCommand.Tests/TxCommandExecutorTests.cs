@@ -98,13 +98,13 @@ namespace TxCommand.Tests
 
             var command = new Mock<ITxCommand>();
             command.Setup(x => x.Validate()).Verifiable();
-            command.Setup(x => x.ExecuteAsync(transaction)).Returns(Task.CompletedTask).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction)).Returns(Task.CompletedTask).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             await commandExecutor.ExecuteAsync(command.Object);
 
             command.Verify(x => x.Validate(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction), Times.Once);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction), Times.Once);
             connection.Verify(x => x.BeginTransaction());
         }
 
@@ -119,13 +119,13 @@ namespace TxCommand.Tests
 
             var command = new Mock<ITxCommand>();
             command.Setup(x => x.Validate()).Verifiable();
-            command.Setup(x => x.ExecuteAsync(transaction)).Returns(Task.CompletedTask).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction)).Returns(Task.CompletedTask).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             await commandExecutor.ExecuteAsync(command.Object);
 
             command.Verify(x => x.Validate(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction), Times.Once);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction), Times.Once);
             connection.Verify(x => x.BeginTransaction());
             connection.Verify(x => x.Open());
         }
@@ -153,7 +153,7 @@ namespace TxCommand.Tests
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
             var command = new Mock<ITxCommand>();
-            command.Setup(x => x.ExecuteAsync(transaction.Object)).Returns(Task.CompletedTask).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction.Object)).Returns(Task.CompletedTask).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             commandExecutor.Dispose();
@@ -162,7 +162,7 @@ namespace TxCommand.Tests
                 async () => await commandExecutor.ExecuteAsync(command.Object));
             Assert.Equal(nameof(TxCommandExecutor), ex.ObjectName);
 
-            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Never);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction.Object), Times.Never);
         }
 
         [Fact]
@@ -175,7 +175,7 @@ namespace TxCommand.Tests
 
             var command = new Mock<ITxCommand>();
             var testException = new Exception("Test");
-            command.Setup(x => x.ExecuteAsync(transaction.Object)).Throws(testException).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction.Object)).Throws(testException).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
@@ -184,7 +184,7 @@ namespace TxCommand.Tests
             Assert.Equal(ex, testException);
 
             transaction.Verify(x => x.Rollback(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Once);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction.Object), Times.Once);
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace TxCommand.Tests
 
             transaction.Verify(x => x.Rollback(), Times.Once);
             command.Verify(x => x.Validate(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Never);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction.Object), Times.Never);
         }
 
         [Fact]
@@ -221,14 +221,14 @@ namespace TxCommand.Tests
 
             var command = new Mock<ITxCommand<string>>();
             command.Setup(x => x.Validate()).Verifiable();
-            command.Setup(x => x.ExecuteAsync(transaction)).ReturnsAsync(testResult).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction)).ReturnsAsync(testResult).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             var result = await commandExecutor.ExecuteAsync(command.Object);
             Assert.Equal(testResult, result);
 
             command.Verify(x => x.Validate(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction), Times.Once);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction), Times.Once);
             connection.Verify(x => x.BeginTransaction());
         }
 
@@ -258,7 +258,7 @@ namespace TxCommand.Tests
             connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
 
             var command = new Mock<ITxCommand<string>>();
-            command.Setup(x => x.ExecuteAsync(transaction.Object)).ReturnsAsync(testResult).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction.Object)).ReturnsAsync(testResult).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
             commandExecutor.Dispose();
@@ -267,7 +267,7 @@ namespace TxCommand.Tests
                 async () => await commandExecutor.ExecuteAsync(command.Object));
             Assert.Equal(nameof(TxCommandExecutor), ex.ObjectName);
 
-            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Never);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction.Object), Times.Never);
         }
 
         [Fact]
@@ -280,7 +280,7 @@ namespace TxCommand.Tests
 
             var command = new Mock<ITxCommand<string>>();
             var testException = new Exception("Test");
-            command.Setup(x => x.ExecuteAsync(transaction.Object)).Throws(testException).Verifiable();
+            command.Setup(x => x.ExecuteAsync(connection.Object, transaction.Object)).Throws(testException).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
@@ -289,7 +289,7 @@ namespace TxCommand.Tests
             Assert.Equal(ex, testException);
 
             transaction.Verify(x => x.Rollback(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Once);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction.Object), Times.Once);
         }
 
         [Fact]
@@ -312,7 +312,7 @@ namespace TxCommand.Tests
 
             transaction.Verify(x => x.Rollback(), Times.Once);
             command.Verify(x => x.Validate(), Times.Once);
-            command.Verify(x => x.ExecuteAsync(transaction.Object), Times.Never);
+            command.Verify(x => x.ExecuteAsync(connection.Object, transaction.Object), Times.Never);
         }
 
         [Fact]

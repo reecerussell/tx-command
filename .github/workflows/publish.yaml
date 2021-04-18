@@ -40,17 +40,17 @@ jobs:
           file: TxCommand.Tests/coverage.cobertura.xml
 
       - name: Pack TxCommand
-        run: dotnet pack -c Release --no-restore --no-build TxCommand/TxCommand.csproj
+        run: dotnet pack -c Release --no-restore --no-build -o packages TxCommand/TxCommand.csproj
 
       - name: Pack TxCommand.Abstractions
-        run: dotnet pack -c Release --no-restore --no-build TxCommand.Abstractions/TxCommand.Abstractions.csproj
+        run: dotnet pack -c Release --no-restore --no-build -o packages TxCommand.Abstractions/TxCommand.Abstractions.csproj
 
       - name: Upload Artifacts
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
           name: nuget
-          path: "**.nupkg"
+          path: packages/*.nupkg
 
   test:
     name: Test

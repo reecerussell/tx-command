@@ -89,5 +89,8 @@ jobs:
         with:
           dotnet-version: '3.1.x'
 
-      - name: Publish
-        run: dotnet nuget push packages/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://www.nuget.org/api/v2/package
+      - name: Publish TxCommand
+        run: dotnet nuget push packages/TxCommand.*.*.*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://www.nuget.org/api/v2/package
+
+      - name: Publish TxCommand.Abstractions
+        run: dotnet nuget push packages/TxCommand.Abstractions.*.*.*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://www.nuget.org/api/v2/package

@@ -17,11 +17,11 @@ namespace TxCommand.Example.Commands
             PetName = petName;
         }
 
-        public async Task ExecuteAsync(IDbTransaction transaction)
+        public async Task ExecuteAsync(IDbConnection connection, IDbTransaction transaction)
         {
             const string query = "INSERT INTO [Pets] ([PersonId],[Name]) VALUES (@PersonId,@PetName)";
 
-            await transaction.Connection.ExecuteAsync(query, new {PersonId, PetName}, transaction);
+            await connection.ExecuteAsync(query, new {PersonId, PetName}, transaction);
         }
 
         public void Validate()

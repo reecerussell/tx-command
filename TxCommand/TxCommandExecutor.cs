@@ -16,8 +16,9 @@ namespace TxCommand
         private bool _disposed = false;
         private bool _completed = true;
 
-        public delegate void CommandDelegate(ICommand command);
-        public CommandDelegate OnComplete;
+        public ExecutedDelegate OnExecuted;
+        public CommitDelegate OnCommitted;
+        public RollbackDelegate OnRolledBack;
 
         /// <summary>
         /// Initializes a new instance of <see cref="TxCommandExecutor"/>.
@@ -41,6 +42,8 @@ namespace TxCommand
 
             _transaction?.Commit();
             _completed = true;
+
+            OnCommitted?.Invoke();
         }
 
         /// <summary>
@@ -56,6 +59,8 @@ namespace TxCommand
 
             _transaction?.Rollback();
             _completed = true;
+
+            OnRolledBack?.Invoke();
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace TxCommand
                 command.Validate();
                 await command.ExecuteAsync(_connection, _transaction);
 
-                OnComplete?.Invoke(command);
+                OnExecuted?.Invoke(command);
             }
             catch
             {
@@ -145,7 +150,7 @@ namespace TxCommand
 
                 var result = await command.ExecuteAsync(_connection, _transaction);
 
-                OnComplete?.Invoke(command);
+                OnExecuted?.Invoke(command);
 
                 return result;
             }

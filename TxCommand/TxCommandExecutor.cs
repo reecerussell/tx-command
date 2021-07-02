@@ -16,8 +16,9 @@ namespace TxCommand
         private bool _disposed = false;
         private bool _completed = true;
 
-        public delegate void CommandDelegate(ICommand command);
-        public CommandDelegate OnComplete;
+        public ExecutedDelegate OnExecuted;
+        public CommitDelegate OnCommitted;
+        public RollbackDelegate OnRolledBack;
 
         /// <summary>
         /// Initializes a new instance of <see cref="TxCommandExecutor"/>.
@@ -32,7 +33,7 @@ namespace TxCommand
         /// Commits the underlying transaction.
         /// </summary>
         /// <exception cref="ObjectDisposedException">Throws if the <see cref="TxCommandExecutor"/> has been disposed.</exception>
-        public void Commit()
+        public virtual void Commit()
         {
             if (_disposed)
             {
@@ -41,13 +42,15 @@ namespace TxCommand
 
             _transaction?.Commit();
             _completed = true;
+
+            OnCommitted?.Invoke();
         }
 
         /// <summary>
         /// Rolls back the underlying transaction.
         /// </summary>
         /// <exception cref="ObjectDisposedException">Throws if the <see cref="TxCommandExecutor"/> has been disposed.</exception>
-        public void Rollback()
+        public virtual void Rollback()
         {
             if (_disposed)
             {
@@ -56,6 +59,8 @@ namespace TxCommand
 
             _transaction?.Rollback();
             _completed = true;
+
+            OnRolledBack?.Invoke();
         }
 
         /// <summary>
@@ -68,7 +73,7 @@ namespace TxCommand
         /// <returns></returns>
         /// <exception cref="ObjectDisposedException">Throws if the <see cref="TxCommandExecutor"/> has been disposed.</exception>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="command"/> is null.</exception>
-        public async Task ExecuteAsync(ITxCommand command)
+        public virtual async Task ExecuteAsync(ITxCommand command)
         {
             if (command == null)
             {
@@ -96,7 +101,7 @@ namespace TxCommand
                 command.Validate();
                 await command.ExecuteAsync(_connection, _transaction);
 
-                OnComplete?.Invoke(command);
+                OnExecuted?.Invoke(command);
             }
             catch
             {
@@ -116,7 +121,7 @@ namespace TxCommand
         /// <returns>Returns the output of <paramref name="command"/>.</returns>
         /// <exception cref="ObjectDisposedException">Throws if the <see cref="TxCommandExecutor"/> has been disposed.</exception>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="command"/> is null.</exception>
-        public async Task<TResult> ExecuteAsync<TResult>(ITxCommand<TResult> command)
+        public virtual async Task<TResult> ExecuteAsync<TResult>(ITxCommand<TResult> command)
         {
             if (command == null)
             {
@@ -145,7 +150,7 @@ namespace TxCommand
 
                 var result = await command.ExecuteAsync(_connection, _transaction);
 
-                OnComplete?.Invoke(command);
+                OnExecuted?.Invoke(command);
 
                 return result;
             }
@@ -157,7 +162,7 @@ namespace TxCommand
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_disposed)
             {

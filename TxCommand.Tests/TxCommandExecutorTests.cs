@@ -21,11 +21,19 @@ namespace TxCommand.Tests
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
-            // Start a transaction
+            var callbackCalled = false;
+            commandExecutor.OnCommitted += () =>
+            {
+                callbackCalled = true;
+            };
+
+            // Start a transaction.
             await commandExecutor.ExecuteAsync(Mock.Of<ITxCommand>());
 
             // Act
             commandExecutor.Commit();
+
+            Assert.True(callbackCalled);
 
             transaction.Verify(x => x.Commit(), Times.Once);
         }
@@ -60,11 +68,19 @@ namespace TxCommand.Tests
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
+            var callbackCalled = false;
+            commandExecutor.OnRolledBack += () =>
+            {
+                callbackCalled = true;
+            };
+
             // Start a transaction.
             await commandExecutor.ExecuteAsync(Mock.Of<ITxCommand>());
 
             // Act
             commandExecutor.Rollback();
+
+            Assert.True(callbackCalled);
 
             transaction.Verify(x => x.Rollback(), Times.Once);
         }
@@ -103,7 +119,7 @@ namespace TxCommand.Tests
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
             var callbackCalled = false;
-            commandExecutor.OnComplete += (c) =>
+            commandExecutor.OnExecuted += (c) =>
             {
                 callbackCalled = true;
                 Assert.Equal(command.Object, c);
@@ -236,7 +252,7 @@ namespace TxCommand.Tests
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
             var callbackCalled = false;
-            commandExecutor.OnComplete += (c) =>
+            commandExecutor.OnExecuted += (c) =>
             {
                 callbackCalled = true;
                 Assert.Equal(command.Object, c);

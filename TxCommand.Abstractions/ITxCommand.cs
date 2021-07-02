@@ -4,11 +4,18 @@ using System.Threading.Tasks;
 namespace TxCommand.Abstractions
 {
     /// <summary>
+    /// An empty interface used to identify the different variants of <see cref="ITxCommand"/>.
+    /// </summary>
+    public interface ICommand
+    {
+    }
+
+    /// <summary>
     /// A transaction command is an abstraction used to execute a command which requires
     /// a database transaction in order to operate correctly. <see cref="ITxCommand"/> provides a method
     /// to execute the command, providing it with a <see cref="IDbTransaction"/>.
     /// </summary>
-    public interface ITxCommand
+    public interface ITxCommand : ICommand
     {
         /// <summary>
         /// Executes the implementing command, providing a <see cref="IDbTransaction"/>, allowing
@@ -34,7 +41,7 @@ namespace TxCommand.Abstractions
     /// this provides a type argument, <typeparamref name="TResult"/>, allowing the
     /// command to output data.
     /// </summary>
-    public interface ITxCommand<TResult>
+    public interface ITxCommand<TResult> : ICommand
     {
         /// <summary>
         /// Executes the implementing command, providing a <see cref="IDbTransaction"/>, allowing

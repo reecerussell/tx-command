@@ -16,6 +16,9 @@ namespace TxCommand
         private bool _disposed = false;
         private bool _completed = true;
 
+        public delegate void CommandDelegate(ICommand command);
+        public CommandDelegate OnComplete;
+
         /// <summary>
         /// Initializes a new instance of <see cref="TxCommandExecutor"/>.
         /// </summary>
@@ -92,6 +95,8 @@ namespace TxCommand
             {
                 command.Validate();
                 await command.ExecuteAsync(_connection, _transaction);
+
+                OnComplete?.Invoke(command);
             }
             catch
             {
@@ -137,7 +142,12 @@ namespace TxCommand
             try
             {
                 command.Validate();
-                return await command.ExecuteAsync(_connection, _transaction);
+
+                var result = await command.ExecuteAsync(_connection, _transaction);
+
+                OnComplete?.Invoke(command);
+
+                return result;
             }
             catch
             {

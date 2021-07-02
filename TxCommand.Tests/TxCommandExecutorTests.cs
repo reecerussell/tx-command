@@ -21,11 +21,19 @@ namespace TxCommand.Tests
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
-            // Start a transaction
+            var callbackCalled = false;
+            commandExecutor.OnCommitted += () =>
+            {
+                callbackCalled = true;
+            };
+
+            // Start a transaction.
             await commandExecutor.ExecuteAsync(Mock.Of<ITxCommand>());
 
             // Act
             commandExecutor.Commit();
+
+            Assert.True(callbackCalled);
 
             transaction.Verify(x => x.Commit(), Times.Once);
         }
@@ -60,11 +68,19 @@ namespace TxCommand.Tests
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
 
+            var callbackCalled = false;
+            commandExecutor.OnRolledBack += () =>
+            {
+                callbackCalled = true;
+            };
+
             // Start a transaction.
             await commandExecutor.ExecuteAsync(Mock.Of<ITxCommand>());
 
             // Act
             commandExecutor.Rollback();
+
+            Assert.True(callbackCalled);
 
             transaction.Verify(x => x.Rollback(), Times.Once);
         }
@@ -101,7 +117,17 @@ namespace TxCommand.Tests
             command.Setup(x => x.ExecuteAsync(connection.Object, transaction)).Returns(Task.CompletedTask).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
+
+            var callbackCalled = false;
+            commandExecutor.OnExecuted += (c) =>
+            {
+                callbackCalled = true;
+                Assert.Equal(command.Object, c);
+            };
+
             await commandExecutor.ExecuteAsync(command.Object);
+
+            Assert.True(callbackCalled);
 
             command.Verify(x => x.Validate(), Times.Once);
             command.Verify(x => x.ExecuteAsync(connection.Object, transaction), Times.Once);
@@ -224,8 +250,18 @@ namespace TxCommand.Tests
             command.Setup(x => x.ExecuteAsync(connection.Object, transaction)).ReturnsAsync(testResult).Verifiable();
 
             var commandExecutor = new TxCommandExecutor(connection.Object);
-            var result = await commandExecutor.ExecuteAsync(command.Object);
+
+            var callbackCalled = false;
+            commandExecutor.OnExecuted += (c) =>
+            {
+                callbackCalled = true;
+                Assert.Equal(command.Object, c);
+            };
+
+            var result =await commandExecutor.ExecuteAsync(command.Object);
+
             Assert.Equal(testResult, result);
+            Assert.True(callbackCalled);
 
             command.Verify(x => x.Validate(), Times.Once);
             command.Verify(x => x.ExecuteAsync(connection.Object, transaction), Times.Once);

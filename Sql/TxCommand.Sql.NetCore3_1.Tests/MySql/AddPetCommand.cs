@@ -2,9 +2,9 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
-using TxCommand.Sql.Abstractions;
+using TxCommand.Abstractions;
 
-namespace TxCommand.Example.Commands
+namespace TxCommand.Sql.Tests.MySql
 {
     public class AddPetCommand : ITxCommand
     {
@@ -19,7 +19,7 @@ namespace TxCommand.Example.Commands
 
         public async Task ExecuteAsync(IDbConnection connection, IDbTransaction transaction)
         {
-            const string query = "INSERT INTO [Pets] ([PersonId],[Name]) VALUES (@PersonId,@PetName)";
+            const string query = "INSERT INTO `Pets` (`PersonId`,`Name`) VALUES (@PersonId,@PetName)";
 
             await connection.ExecuteAsync(query, new {PersonId, PetName}, transaction);
         }

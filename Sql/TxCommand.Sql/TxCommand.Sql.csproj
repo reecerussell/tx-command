@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <RootNamespace>TxCommand</RootNamespace>
+    <Authors>Reece Russell</Authors>
+    <Description>Provides SQL implementations for TxCommand, supporting MySQL and SQL Server.</Description>
+    <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>cqrs, msql, sql, mssql, commanding, query</PackageTags>
+    <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TxCommand.Sql.Abstractions\TxCommand.Sql.Abstractions.csproj" />
+    <ProjectReference Include="..\..\TxCommand\TxCommand.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

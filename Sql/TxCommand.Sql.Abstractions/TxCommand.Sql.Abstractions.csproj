@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <RootNamespace>TxCommand.Abstractions</RootNamespace>
+    <Authors>Reece Russell</Authors>
+    <Description>Provides abstractions for TxCommand.Sql, including ITxCommand, ISession and ISessionFactory.</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>cqrs, sql, mysql, tsql, commanding, query</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\TxCommand.Abstractions\TxCommand.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,19 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.5.0</Version>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <Version>1.0.0</Version>
     <Authors>Reece Russell</Authors>
     <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>CQRS, commanding, sql, transaction</PackageTags>
-    <Description>Provides support for executing CQRS command within a database transaction.</Description>
+    <Description>Provides the core implementation for TxCommand, to support driver specific packages.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReleaseNotes>A major rewrite of internals and key interfaces. TxCommandExecutor has been replaced with Session.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

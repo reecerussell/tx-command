@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\TxCommand.MySql.Abstractions\TxCommand.Sql.Abstractions.csproj" />
     <ProjectReference Include="..\..\TxCommand\TxCommand.csproj" />
   </ItemGroup>
 

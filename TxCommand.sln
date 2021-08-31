@@ -7,13 +7,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand", "TxCommand\TxCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Abstractions", "TxCommand.Abstractions\TxCommand.Abstractions.csproj", "{B12D5EE5-EFA9-4492-8897-DD39A2889ABF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Tests", "TxCommand.Tests\TxCommand.Tests.csproj", "{9AD7230D-988A-466C-9536-37340078BBA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.NetCore3_1.Tests", "TxCommand.NetCore3_1.Tests\TxCommand.NetCore3_1.Tests.csproj", "{9AD7230D-988A-466C-9536-37340078BBA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{8B8F046F-9A36-4C19-91C8-E747300D9FDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Example", "Example\TxCommand.Example\TxCommand.Example.csproj", "{F33E6CE6-51D3-418E-B216-606CDCF2DCD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Example", "Example\TxCommand.Example\TxCommand.Example.csproj", "{F33E6CE6-51D3-418E-B216-606CDCF2DCD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Example.IntegrationTests", "Example\TxCommand.Example.IntegrationTests\TxCommand.Example.IntegrationTests.csproj", "{FAC983FD-8992-41C5-A407-CB6514F110D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Example.IntegrationTests", "Example\TxCommand.Example.IntegrationTests\TxCommand.Example.IntegrationTests.csproj", "{FAC983FD-8992-41C5-A407-CB6514F110D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{A09BDC81-7A8A-46C4-83B9-E7148E5627F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Sql", "Sql\TxCommand.Sql\TxCommand.Sql.csproj", "{BC3755CF-12D8-42F3-ACB5-F7CC11218CD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Sql.Abstractions", "Sql\TxCommand.Sql.Abstractions\TxCommand.Sql.Abstractions.csproj", "{B55572A6-D9B4-45CA-8648-EE7E87638948}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Net5.Tests", "TxCommand.Net5.Tests\TxCommand.Net5.Tests.csproj", "{77226287-7F3C-47E9-BD8B-9D9B82CAAC9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Sql.Net5.Tests", "Sql\TxCommand.Sql.Net5.Tests\TxCommand.Sql.Net5.Tests.csproj", "{066B378A-8E28-49F9-8EAB-0D70FF0AE939}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Sql.NetCore3_1.Tests", "Sql\TxCommand.Sql.NetCore3_1.Tests\TxCommand.Sql.NetCore3_1.Tests.csproj", "{D9B675D0-8B64-46CC-8959-6D9426313EA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +53,26 @@ Global
 		{FAC983FD-8992-41C5-A407-CB6514F110D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAC983FD-8992-41C5-A407-CB6514F110D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC983FD-8992-41C5-A407-CB6514F110D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3755CF-12D8-42F3-ACB5-F7CC11218CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3755CF-12D8-42F3-ACB5-F7CC11218CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3755CF-12D8-42F3-ACB5-F7CC11218CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3755CF-12D8-42F3-ACB5-F7CC11218CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B55572A6-D9B4-45CA-8648-EE7E87638948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B55572A6-D9B4-45CA-8648-EE7E87638948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B55572A6-D9B4-45CA-8648-EE7E87638948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B55572A6-D9B4-45CA-8648-EE7E87638948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77226287-7F3C-47E9-BD8B-9D9B82CAAC9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77226287-7F3C-47E9-BD8B-9D9B82CAAC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77226287-7F3C-47E9-BD8B-9D9B82CAAC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77226287-7F3C-47E9-BD8B-9D9B82CAAC9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066B378A-8E28-49F9-8EAB-0D70FF0AE939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066B378A-8E28-49F9-8EAB-0D70FF0AE939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066B378A-8E28-49F9-8EAB-0D70FF0AE939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066B378A-8E28-49F9-8EAB-0D70FF0AE939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9B675D0-8B64-46CC-8959-6D9426313EA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9B675D0-8B64-46CC-8959-6D9426313EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9B675D0-8B64-46CC-8959-6D9426313EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9B675D0-8B64-46CC-8959-6D9426313EA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +80,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F33E6CE6-51D3-418E-B216-606CDCF2DCD1} = {8B8F046F-9A36-4C19-91C8-E747300D9FDF}
 		{FAC983FD-8992-41C5-A407-CB6514F110D3} = {8B8F046F-9A36-4C19-91C8-E747300D9FDF}
+		{BC3755CF-12D8-42F3-ACB5-F7CC11218CD7} = {A09BDC81-7A8A-46C4-83B9-E7148E5627F5}
+		{B55572A6-D9B4-45CA-8648-EE7E87638948} = {A09BDC81-7A8A-46C4-83B9-E7148E5627F5}
+		{066B378A-8E28-49F9-8EAB-0D70FF0AE939} = {A09BDC81-7A8A-46C4-83B9-E7148E5627F5}
+		{D9B675D0-8B64-46CC-8959-6D9426313EA3} = {A09BDC81-7A8A-46C4-83B9-E7148E5627F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {85A24F20-DC39-4A89-9EF5-71AD5672F3D0}

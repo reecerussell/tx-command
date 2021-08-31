@@ -2,9 +2,9 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
-using TxCommand.Sql.Abstractions;
+using TxCommand.Abstractions;
 
-namespace TxCommand.Example.Commands
+namespace TxCommand.Sql.Tests.Sql
 {
     public class AddPetCommand : ITxCommand
     {

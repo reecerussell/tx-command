@@ -12,6 +12,8 @@ TxCommand is a simple commanding package which provides commanding interfaces th
 | ---------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | TxCommand              | ![Nuget](https://img.shields.io/nuget/v/TxCommand)              | [![Nuget](https://img.shields.io/nuget/dt/TxCommand)](https://www.nuget.org/packages/TxCommand/)                           |
 | TxCommand.Abstractions | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Abstractions) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Abstractions)](https://www.nuget.org/packages/TxCommand.Abstractions/) |
+| TxCommand.Sql | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Sql) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Sql)](https://www.nuget.org/packages/TxCommand.Sql/) |
+| TxCommand.Sql.Abstractions | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Sql.Abstractions) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Sql.Abstractions)](https://www.nuget.org/packages/TxCommand.Sql.Abstractions/) |
 
 ## Get Started
 
@@ -113,4 +115,4 @@ public class CarFactory
 
 ## Contributing
 
-Not much here, but feel free to raise and issues or open a Pull Request if you think of an enhancement or spot a bug!
+Not much here, but feel free to raise an issue or open a Pull Request if you think of an enhancement or spot a bug!

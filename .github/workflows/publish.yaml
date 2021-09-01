@@ -20,6 +20,11 @@ jobs:
         with:
           dotnet-version: '3.1.x'
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.x'
+
       - name: Build
         run: ./scripts/build.sh
 
@@ -51,6 +56,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.x'
 
       - name: Pull Database Images
         run: |

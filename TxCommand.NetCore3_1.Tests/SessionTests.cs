@@ -40,14 +40,20 @@ namespace TxCommand.Tests
             command.Setup(x => x.ExecuteAsync(database, transaction))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            
+
+            var callbackCalled = false;
+
             using (var session = new Session<ITestDatabase, ITestTransaction>(provider.Object))
             {
+                session.OnExecuted += cmd => callbackCalled = cmd == command.Object;
+
                 var task = session.ExecuteAsync(command.Object);
                 await task;
 
                 task.IsCompletedSuccessfully.Should().BeTrue();
             }
+
+            callbackCalled.Should().BeTrue();
 
             provider.VerifyAll();
             provider.Verify(x => x.Commit(), Times.Once);
@@ -183,14 +189,20 @@ namespace TxCommand.Tests
                 .ReturnsAsync(testResult)
                 .Verifiable();
 
+            var callbackCalled = false;
+
             using (var session = new Session<ITestDatabase, ITestTransaction>(provider.Object))
             {
+                session.OnExecuted += cmd => callbackCalled = cmd == command.Object;
+
                 var task = session.ExecuteAsync(command.Object);
                 await task;
 
                 task.IsCompletedSuccessfully.Should().BeTrue();
                 task.Result.Should().Be(testResult);
             }
+
+            callbackCalled.Should().BeTrue();
 
             provider.VerifyAll();
             provider.Verify(x => x.Commit(), Times.Once);
@@ -314,7 +326,12 @@ namespace TxCommand.Tests
             session.GetType().GetField("_completed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(session, false);
 
+            var callbackInvoked = false;
+            session.OnCommitted += () => callbackInvoked = true;
+
             await session.CommitAsync();
+
+            callbackInvoked.Should().BeTrue();
 
             provider.VerifyAll();
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -368,7 +385,12 @@ namespace TxCommand.Tests
             session.GetType().GetField("_completed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(session, false);
 
+            var callbackInvoked = false;
+            session.OnCommitted += () => callbackInvoked = true;
+
             session.Commit();
+
+            callbackInvoked.Should().BeTrue();
 
             provider.VerifyAll();
             provider.Verify(x => x.Commit(), Times.Once);
@@ -422,7 +444,12 @@ namespace TxCommand.Tests
             session.GetType().GetField("_completed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(session, false);
 
+            var callbackInvoked = false;
+            session.OnRolledBack += () => callbackInvoked = true;
+
             await session.RollbackAsync();
+
+            callbackInvoked.Should().BeTrue();
 
             provider.VerifyAll();
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);

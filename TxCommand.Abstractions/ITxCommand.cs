@@ -16,7 +16,7 @@ namespace TxCommand.Abstractions
 
     /// <summary>
     /// A transaction command is an abstraction used to execute a command which requires
-    /// a database transaction in order to operate correctly. <see cref="ITxCommand"/> provides a method
+    /// a database transaction in order to operate correctly. <see cref="ITxCommand{TDatabase,TTransaction}"/> provides a method
     /// to execute the command, providing it with a <see cref="IDbTransaction"/>.
     /// </summary>
     public interface ITxCommand<in TDatabase, in TTransaction> : ICommand
@@ -35,8 +35,8 @@ namespace TxCommand.Abstractions
 
     /// <summary>
     /// A transaction command is an abstraction used to execute a command which requires
-    /// a database transaction in order to operate correctly. <see cref="ITxCommand"/> provides a method
-    /// to execute the command, providing it with a <see cref="TTra"/>.
+    /// a database transaction in order to operate correctly. <see cref="ITxCommand{TDatabase,TTransaction,TResult}"/> provides a method
+    /// to execute the command, providing it with a <see cref="TTransaction"/>.
     ///
     /// This command interface behaves the same as the non-generic interface, however,
     /// this provides a type argument, <typeparamref name="TResult"/>, allowing the

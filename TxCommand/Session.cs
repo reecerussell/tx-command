@@ -16,6 +16,10 @@ namespace TxCommand
         private bool _completed = true;
         private bool _disposed = false;
 
+        public SessionEvent OnCommitted { get; set; }
+        public SessionEvent OnRolledBack { get; set; }
+        public ExecutedEvent OnExecuted { get; set; }
+
         public Session(ITransactionProvider<TDatabase, TTransaction> provider)
         {
             _ctx = new CancellationTokenSource();
@@ -44,6 +48,8 @@ namespace TxCommand
 
                 var (database, transaction) = _provider.GetExecutionArguments();
                 await command.ExecuteAsync(database, transaction);
+
+                OnExecuted?.Invoke(command);
             }
             catch (Exception)
             {
@@ -74,7 +80,11 @@ namespace TxCommand
                 command.Validate();
 
                 var (database, transaction) = _provider.GetExecutionArguments();
-                return await command.ExecuteAsync(database, transaction);
+                var result = await command.ExecuteAsync(database, transaction);
+
+                OnExecuted?.Invoke(command);
+
+                return result;
             }
             catch (Exception)
             {
@@ -98,6 +108,8 @@ namespace TxCommand
 
             await _provider.CommitAsync(_ctx.Token);
             _completed = true;
+
+            OnCommitted?.Invoke();
         }
 
         public void Commit()
@@ -114,6 +126,8 @@ namespace TxCommand
 
             _provider.Commit();
             _completed = true;
+
+            OnCommitted?.Invoke();
         }
 
         public async Task RollbackAsync()
@@ -130,6 +144,8 @@ namespace TxCommand
 
             await _provider.RollbackAsync(_ctx.Token);
             _completed = true;
+
+            OnRolledBack?.Invoke();
         }
 
         public void Dispose()

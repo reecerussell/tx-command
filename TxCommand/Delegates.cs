@@ -3,18 +3,15 @@
 namespace TxCommand
 {
     /// <summary>
-    /// A delegate used to execute a callback when a command has been executed.
+    /// Used to provide eventing hooks on <see cref="Session{TDatabase,TTransaction}"/>.
+    /// Typically called when a session has been committed, or rolled back.
     /// </summary>
-    /// <param name="command">The executed command.</param>
-    public delegate void ExecutedDelegate(ICommand command);
+    public delegate void SessionEvent();
 
     /// <summary>
-    /// A delegate used to execute a callback when a transaction is committed.
+    /// Used to provide an eventing hook on <see cref="Session{TDatabase,TTransaction}"/>,
+    /// which is called when a command has been successfully executed.
     /// </summary>
-    public delegate void CommitDelegate();
-
-    /// <summary>
-    /// A delegate used to execute a callback when a transaction is rolled back.
-    /// </summary>
-    public delegate void RollbackDelegate();
+    /// <param name="command"></param>
+    public delegate void ExecutedEvent(ICommand command);
 }

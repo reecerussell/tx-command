@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
 using Moq;
+using System;
 using System.Data;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Xunit;
 
 namespace TxCommand.Sql.Tests
@@ -14,8 +14,15 @@ namespace TxCommand.Sql.Tests
         [Fact]
         public void Ctor_GivenNullConnection_ThrowsArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new TransactionProvider(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new TransactionProvider(null, new SqlOptions()));
             ex.ParamName.Should().Be("connection");
+        }
+
+        [Fact]
+        public void Ctor_GivenNullOptions_ThrowsArgumentNullException()
+        {
+            var ex = Assert.Throws<ArgumentNullException>(() => new TransactionProvider(Mock.Of<IDbConnection>(), null));
+            ex.ParamName.Should().Be("options");
         }
 
         [Fact]
@@ -26,9 +33,9 @@ namespace TxCommand.Sql.Tests
             database.Setup(x => x.Open()).Verifiable();
 
             var transaction = Mock.Of<IDbTransaction>();
-            database.Setup(x => x.BeginTransaction()).Returns(transaction).Verifiable();
+            database.Setup(x => x.BeginTransaction(IsolationLevel.ReadUncommitted)).Returns(transaction).Verifiable();
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             await provider.EnsureTransactionAsync(CancellationToken.None);
 
             database.VerifyAll();
@@ -40,7 +47,7 @@ namespace TxCommand.Sql.Tests
             var database = new Mock<IDbConnection>();
             database.SetupGet(x => x.State).Returns(ConnectionState.Open);
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, Mock.Of<IDbTransaction>());
 
@@ -55,12 +62,12 @@ namespace TxCommand.Sql.Tests
         {
             var database = new Mock<IDbConnection>();
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_disposed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, true);
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() => provider.EnsureTransactionAsync(CancellationToken.None));
-            
+
             database.Verify(x => x.BeginTransaction(), Times.Never);
         }
 
@@ -69,8 +76,8 @@ namespace TxCommand.Sql.Tests
         {
             var transaction = new Mock<IDbTransaction>();
             transaction.Setup(x => x.Commit()).Verifiable();
-            
-            var provider = new TransactionProvider(Mock.Of<IDbConnection>());
+
+            var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, transaction.Object);
 
@@ -85,7 +92,7 @@ namespace TxCommand.Sql.Tests
         {
             var database = new Mock<IDbConnection>();
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_disposed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, true);
 
@@ -98,7 +105,7 @@ namespace TxCommand.Sql.Tests
             var transaction = new Mock<IDbTransaction>();
             transaction.Setup(x => x.Commit()).Verifiable();
 
-            var provider = new TransactionProvider(Mock.Of<IDbConnection>());
+            var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, transaction.Object);
 
@@ -113,7 +120,7 @@ namespace TxCommand.Sql.Tests
         {
             var database = new Mock<IDbConnection>();
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_disposed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, true);
 
@@ -126,7 +133,7 @@ namespace TxCommand.Sql.Tests
             var transaction = new Mock<IDbTransaction>();
             transaction.Setup(x => x.Rollback()).Verifiable();
 
-            var provider = new TransactionProvider(Mock.Of<IDbConnection>());
+            var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, transaction.Object);
 
@@ -141,7 +148,7 @@ namespace TxCommand.Sql.Tests
         {
             var database = new Mock<IDbConnection>();
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_disposed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, true);
 
@@ -153,7 +160,7 @@ namespace TxCommand.Sql.Tests
         {
             var database = Mock.Of<IDbConnection>();
 
-            var provider = new TransactionProvider(database);
+            var provider = new TransactionProvider(database, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, null);
 
@@ -168,7 +175,7 @@ namespace TxCommand.Sql.Tests
             var database = Mock.Of<IDbConnection>();
             var transaction = Mock.Of<IDbTransaction>();
 
-            var provider = new TransactionProvider(database);
+            var provider = new TransactionProvider(database, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, transaction);
 
@@ -182,7 +189,7 @@ namespace TxCommand.Sql.Tests
         {
             var database = new Mock<IDbConnection>();
 
-            var provider = new TransactionProvider(database.Object);
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_disposed", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, true);
 

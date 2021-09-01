@@ -10,13 +10,15 @@ namespace TxCommand
     public class TransactionProvider : ITransactionProvider<IDbConnection, IDbTransaction>
     {
         private readonly IDbConnection _connection;
+        private readonly SqlOptions _options;
         private IDbTransaction _transaction;
 
         private bool _disposed = false;
 
-        public TransactionProvider(IDbConnection connection)
+        public TransactionProvider(IDbConnection connection, SqlOptions options)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public Task EnsureTransactionAsync(CancellationToken cancellationToken)
@@ -33,7 +35,7 @@ namespace TxCommand
 
             if (_transaction == null)
             {
-                _transaction = _connection.BeginTransaction();
+                _transaction = _connection.BeginTransaction(_options.IsolationLevel);
             }
 
             return Task.CompletedTask;

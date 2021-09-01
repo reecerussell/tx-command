@@ -15,8 +15,6 @@ TxCommand is a simple commanding package which provides commanding interfaces th
 
 ## Get Started
 
-- Install
-
 For this example, we'll be using the Sql variant of TxCommand, `TxCommand.Sql`. To get started, install the `TxCommand.Sql` package to your project - this can be done either with the NuGet Package Manager or the NuGet CLI.
 
 ```

@@ -63,8 +63,8 @@ jobs:
 
       - name: Display Coverage Files
         run: |
-          ls ./Coverage
-          ls ./Sql/Coverage
+          ls -R ./Coverage
+          ls -R ./Sql/Coverage
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v1

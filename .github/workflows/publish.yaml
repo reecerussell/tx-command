@@ -61,11 +61,6 @@ jobs:
       - name: Test
         run: ./scripts/test.sh
 
-      - name: Display Coverage Files
-        run: |
-          ls -R ./Coverage
-          ls -R ./Sql/Coverage
-
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v1
         with:

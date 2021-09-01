@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using TxCommand.Abstractions;
 
 namespace TxCommand
@@ -11,17 +12,12 @@ namespace TxCommand
         /// <summary>
         /// Registers the required services for using the TxCommand interfaces.
         /// </summary>
-        /// <param name="services">An instance of <see cref="IServiceCollection"/>.</param>
-        /// <returns><paramref name="services"/> with the TxCommand services.</returns>
-        public static IServiceCollection AddTxCommand(this IServiceCollection services)
+        public static IServiceCollection AddTxCommand(this IServiceCollection services, Action<ITxCommandBuilder> builder)
         {
-            return services.AddTransient<ITxCommandExecutorFactory, TxCommandExecutorFactory>()
-                .AddTransient<ITxCommandExecutor>(provider =>
-                {
-                    var factory = provider.GetRequiredService<ITxCommandExecutorFactory>();
+            var builderInstance = new TxCommandBuilder(services);
+            builder?.Invoke(builderInstance);
 
-                    return factory.Create();
-                });
+            return services;
         }
     }
 }

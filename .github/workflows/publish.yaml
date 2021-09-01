@@ -28,20 +28,6 @@ jobs:
       - name: Build
         run: ./scripts/build.sh
 
-      - name: Unit Test
-        run: dotnet test --no-restore -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura TxCommand.Tests/TxCommand.Tests.csproj
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          file: TxCommand.Tests/coverage.cobertura.xml
-
-      - name: Pack TxCommand
-        run: dotnet pack -c Release --no-restore --no-build -o packages TxCommand/TxCommand.csproj
-
-      - name: Pack TxCommand.Abstractions
-        run: dotnet pack -c Release --no-restore --no-build -o packages TxCommand.Abstractions/TxCommand.Abstractions.csproj
-
       - name: Upload Artifacts
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: actions/upload-artifact@v2

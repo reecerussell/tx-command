@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,16 +20,8 @@ jobs:
         with:
           dotnet-version: '3.1.x'
 
-      - name: Restore
-        run: |
-          dotnet restore TxCommand/TxCommand.csproj
-          dotnet restore TxCommand.Tests/TxCommand.Tests.csproj
-
-      - name: Build TxCommand
-        run: dotnet build -c Release --no-restore TxCommand/TxCommand.csproj
-
-      - name: Build TxCommand.Abstractions
-        run: dotnet build -c Release --no-restore TxCommand.Abstractions/TxCommand.Abstractions.csproj
+      - name: Build
+        run: ./scripts/build.sh
 
       - name: Unit Test
         run: dotnet test --no-restore -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura TxCommand.Tests/TxCommand.Tests.csproj
@@ -60,17 +52,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Pull Database Image
-        run: docker pull mcr.microsoft.com/mssql/server:2017-CU17-ubuntu
-
-      - name: Restore
-        run: dotnet restore Example/TxCommand.Example.IntegrationTests/TxCommand.Example.IntegrationTests.csproj
-
-      - name: Build
-        run: dotnet build --no-restore Example/TxCommand.Example.IntegrationTests/TxCommand.Example.IntegrationTests.csproj
+      - name: Pull Database Images
+        run: |
+          docker pull mcr.microsoft.com/mssql/server:2019-latest
+          docker pull mysql:8.0.23
 
       - name: Test
-        run: dotnet test Example/TxCommand.Example.IntegrationTests/TxCommand.Example.IntegrationTests.csproj
+        run: ./scripts/test.sh
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          files: >
+            ./Coverage/TxCommand.Net5.Tests/coverage.cobertura.xml,
+            ./Coverage/TxCommand.NetCore3_1.Tests/coverage.cobertura.xml,
+            ./Sql/Coverage/TxCommand.Sql.Net5.Tests/coverage.cobertura.xml,
+            ./Sql/Coverage/TxCommand.Sql.NetCore3_1.Tests/coverage.cobertura.xml
 
   publish:
     name: Publish
@@ -94,3 +91,9 @@ jobs:
 
       - name: Publish TxCommand.Abstractions
         run: dotnet nuget push packages/TxCommand.Abstractions.*.*.*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://www.nuget.org/api/v2/package --skip-duplicate
+
+      - name: Publish TxCommand
+        run: dotnet nuget push packages/TxCommand.Sql.*.*.*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://www.nuget.org/api/v2/package --skip-duplicate
+
+      - name: Publish TxCommand.Abstractions
+        run: dotnet nuget push packages/TxCommand.Sql.Abstractions.*.*.*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://www.nuget.org/api/v2/package --skip-duplicate

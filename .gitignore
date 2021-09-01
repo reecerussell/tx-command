@@ -3,6 +3,7 @@
 **/obj/*
 *.user
 
-TxCommand.Tests/coverage.json
-TxCommand.Tests/coverage.cobertura.xml
-TxCommand.Tests/TestResults
+*coverage.json
+*coverage.cobertura.xml
+TestResults
+Coverage

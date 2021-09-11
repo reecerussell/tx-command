@@ -25,7 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mongo", "Mongo", "{3E2C37C5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Mongo", "Mongo\TxCommand.Mongo\TxCommand.Mongo.csproj", "{5909D55A-E408-4D64-A0E9-92682D3096E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Mongo.Abstractions", "Mongo\TxCommand.Mongo.Abstractions\TxCommand.Mongo.Abstractions.csproj", "{3F428708-5B9E-4AA6-9768-0E1D5881C466}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Mongo.Abstractions", "Mongo\TxCommand.Mongo.Abstractions\TxCommand.Mongo.Abstractions.csproj", "{3F428708-5B9E-4AA6-9768-0E1D5881C466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Mongo.Net5.Tests", "Mongo\TxCommand.Mongo.Net5.Tests\TxCommand.Mongo.Net5.Tests.csproj", "{A0806443-588C-4746-B88D-50215C390427}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Mongo.NetCore3_1.Tests", "Mongo\TxCommand.Mongo.NetCore3_1.Tests\TxCommand.Mongo.NetCore3_1.Tests.csproj", "{D70F4447-E51B-4698-9D40-62F830CEA6E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +77,14 @@ Global
 		{3F428708-5B9E-4AA6-9768-0E1D5881C466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F428708-5B9E-4AA6-9768-0E1D5881C466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F428708-5B9E-4AA6-9768-0E1D5881C466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0806443-588C-4746-B88D-50215C390427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0806443-588C-4746-B88D-50215C390427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0806443-588C-4746-B88D-50215C390427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0806443-588C-4746-B88D-50215C390427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D70F4447-E51B-4698-9D40-62F830CEA6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D70F4447-E51B-4698-9D40-62F830CEA6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D70F4447-E51B-4698-9D40-62F830CEA6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D70F4447-E51B-4698-9D40-62F830CEA6E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +96,8 @@ Global
 		{D9B675D0-8B64-46CC-8959-6D9426313EA3} = {A09BDC81-7A8A-46C4-83B9-E7148E5627F5}
 		{5909D55A-E408-4D64-A0E9-92682D3096E0} = {3E2C37C5-CC57-4B22-B218-961D8A8100DE}
 		{3F428708-5B9E-4AA6-9768-0E1D5881C466} = {3E2C37C5-CC57-4B22-B218-961D8A8100DE}
+		{A0806443-588C-4746-B88D-50215C390427} = {3E2C37C5-CC57-4B22-B218-961D8A8100DE}
+		{D70F4447-E51B-4698-9D40-62F830CEA6E6} = {3E2C37C5-CC57-4B22-B218-961D8A8100DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {85A24F20-DC39-4A89-9EF5-71AD5672F3D0}

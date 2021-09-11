@@ -19,7 +19,7 @@ namespace TxCommand.Mongo.NetCore3_1.Tests
 
         public async Task InitializeAsync()
         {
-            var mongo = new MongoClient("mongodb://localhost:30001/bonsai");
+            var mongo = new MongoClient("mongodb://localhost:30001/test");
             var db = mongo.GetDatabase("test");
             _people = db.GetCollection<BsonDocument>("people");
             _pets = db.GetCollection<BsonDocument>("pets");

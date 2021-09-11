@@ -154,15 +154,14 @@ namespace TxCommand.Mongo.NetCore3_1.Tests
         }
 
         [Fact]
-        public async Task CommitAsync_WhereDisposed_Throws()
+        public void Commit_WhereDisposed_Throws()
         {
             var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
 
             provider.GetType().GetField("_disposed", BindingFlags.Instance | BindingFlags.NonPublic)?
                 .SetValue(provider, true);
 
-            await Assert.ThrowsAsync<ObjectDisposedException>(() =>
-                provider.CommitAsync(CancellationToken.None));
+            Assert.Throws<ObjectDisposedException>(() => provider.Commit());
         }
 
         [Fact]

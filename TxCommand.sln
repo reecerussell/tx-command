@@ -27,9 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Mongo", "Mongo\Tx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Mongo.Abstractions", "Mongo\TxCommand.Mongo.Abstractions\TxCommand.Mongo.Abstractions.csproj", "{3F428708-5B9E-4AA6-9768-0E1D5881C466}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Mongo.Net5.Tests", "Mongo\TxCommand.Mongo.Net5.Tests\TxCommand.Mongo.Net5.Tests.csproj", "{A0806443-588C-4746-B88D-50215C390427}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Mongo.Net5.Tests", "Mongo\TxCommand.Mongo.Net5.Tests\TxCommand.Mongo.Net5.Tests.csproj", "{A0806443-588C-4746-B88D-50215C390427}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxCommand.Mongo.NetCore3_1.Tests", "Mongo\TxCommand.Mongo.NetCore3_1.Tests\TxCommand.Mongo.NetCore3_1.Tests.csproj", "{D70F4447-E51B-4698-9D40-62F830CEA6E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxCommand.Mongo.NetCore3_1.Tests", "Mongo\TxCommand.Mongo.NetCore3_1.Tests\TxCommand.Mongo.NetCore3_1.Tests.csproj", "{D70F4447-E51B-4698-9D40-62F830CEA6E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

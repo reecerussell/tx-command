@@ -28,4 +28,20 @@ docker-compose down
 
 cd ..
 
+echo "Running Mongo tests..."
+
+cd Mongo
+
+echo "Starting Docker environment..."
+docker-compose up -d & sleep 30
+
+echo "Running tests..."
+run_test TxCommand.Mongo.Net5.Tests/TxCommand.Mongo.Net5.Tests.csproj TxCommand.Mongo.Net5.Tests
+run_test TxCommand.Mongo.NetCore3_1.Tests/TxCommand.Mongo.NetCore3_1.Tests.csproj TxCommand.Mongo.NetCore3_1.Tests
+
+echo "Cleaning up Docker environment..."
+docker-compose down
+
+cd ..
+
 echo "Finished!"

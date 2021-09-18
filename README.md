@@ -14,6 +14,8 @@ TxCommand is a simple commanding package which provides commanding interfaces th
 | TxCommand.Abstractions | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Abstractions) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Abstractions)](https://www.nuget.org/packages/TxCommand.Abstractions/) |
 | TxCommand.Sql | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Sql) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Sql)](https://www.nuget.org/packages/TxCommand.Sql/) |
 | TxCommand.Sql.Abstractions | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Sql.Abstractions) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Sql.Abstractions)](https://www.nuget.org/packages/TxCommand.Sql.Abstractions/) |
+| TxCommand.Mongo | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Mongo) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Mongo)](https://www.nuget.org/packages/TxCommand.Mongo/) |
+| TxCommand.Mongo.Abstractions | ![Nuget](https://img.shields.io/nuget/v/TxCommand.Mongo.Abstractions) | [![Nuget](https://img.shields.io/nuget/dt/TxCommand.Mongo.Abstractions)](https://www.nuget.org/packages/TxCommand.Mongo.Abstractions/) |
 
 ## Get Started
 

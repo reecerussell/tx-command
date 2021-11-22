@@ -34,6 +34,7 @@ cd Mongo
 
 echo "Starting Docker environment..."
 docker-compose up -d & sleep 35
+docker-compose logs
 
 echo "Running tests..."
 run_test TxCommand.Mongo.Net5.Tests/TxCommand.Mongo.Net5.Tests.csproj TxCommand.Mongo.Net5.Tests

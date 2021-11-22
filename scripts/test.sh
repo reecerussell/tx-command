@@ -33,7 +33,7 @@ echo "Running Mongo tests..."
 cd Mongo
 
 echo "Starting Docker environment..."
-docker-compose up -d & sleep 35
+docker-compose up -d && sleep 35
 docker-compose logs
 
 echo "Running tests..."

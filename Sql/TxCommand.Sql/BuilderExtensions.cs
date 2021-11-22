@@ -22,7 +22,7 @@ namespace TxCommand
             builder.Services.AddSingleton(sqlOptions);
             builder.Services.TryAddTransient<ITransactionProvider<IDbConnection, IDbTransaction>, TransactionProvider>();
             builder.Services.TryAddTransient<ISession, Session>();
-            builder.Services.TryAddSingleton<ISessionFactory, SessionFactory>();
+            builder.Services.TryAddTransient<ISessionFactory, SessionFactory>();
 
             return builder;
         }

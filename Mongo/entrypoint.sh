@@ -1,7 +1,7 @@
 #!/bin/bash
 
 init(){
-    sleep 25
+    sleep 30
 
     echo -e "\n\n\nCreating collections...\n\n\n"
     mongo localhost:30001 <<EOF

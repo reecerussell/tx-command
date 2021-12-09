@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Reece Russell</Authors>
     <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -10,8 +10,8 @@
     <Description>Provides the core implementation for TxCommand, to support driver specific packages.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReleaseNotes>A major rewrite of internals and key interfaces. TxCommandExecutor has been replaced with Session.</PackageReleaseNotes>

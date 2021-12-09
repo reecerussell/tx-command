@@ -20,7 +20,6 @@ echo "Starting Docker environment..."
 docker-compose up -d & sleep 20
 
 echo "Running tests..."
-run_test TxCommand.Sql.Tests/TxCommand.Sql.Tests.csproj TxCommand.Sql.Tests
 run_test TxCommand.Sql.Net5.Tests/TxCommand.Sql.Net5.Tests.csproj TxCommand.Sql.Net5.Tests
 run_test TxCommand.Sql.NetCore3_1.Tests/TxCommand.Sql.NetCore3_1.Tests.csproj TxCommand.Sql.NetCore3_1.Tests
 

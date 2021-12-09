@@ -65,7 +65,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           files: >
-            ./Coverage/TxCommand.Net5.Tests/coverage.cobertura.xml,./Coverage/TxCommand.NetCore3_1.Tests/coverage.cobertura.xml,./Sql/Coverage/TxCommand.Sql.Tests/coverage.cobertura.xml,./Sql/Coverage/TxCommand.Sql.Net5.Tests/coverage.cobertura.xml,./Sql/Coverage/TxCommand.Sql.NetCore3_1.Tests/coverage.cobertura.xml,./Mongo/Coverage/TxCommand.Mongo.Net5.Tests/coverage.cobertura.xml,./Mongo/Coverage/TxCommand.Mongo.NetCore3_1.Tests/coverage.cobertura.xml
+            ./Coverage/TxCommand.Net5.Tests/coverage.cobertura.xml,./Coverage/TxCommand.NetCore3_1.Tests/coverage.cobertura.xml,./Sql/Coverage/TxCommand.Sql.Net5.Tests/coverage.cobertura.xml,./Sql/Coverage/TxCommand.Sql.NetCore3_1.Tests/coverage.cobertura.xml,./Mongo/Coverage/TxCommand.Mongo.Net5.Tests/coverage.cobertura.xml,./Mongo/Coverage/TxCommand.Mongo.NetCore3_1.Tests/coverage.cobertura.xml
 
   publish:
     name: Publish

@@ -7,13 +7,13 @@ namespace TxCommand
     /// <inheritdoc />
     public class SessionFactory<TSession> : ISessionFactory<TSession> where TSession : class
     {
-        private readonly IServiceProvider _services;
+        protected readonly IServiceProvider Services;
 
         public SessionFactory(IServiceProvider services)
         {
-            _services = services;
+            Services = services;
         }
 
-        public TSession Create() => _services.GetRequiredService<TSession>();
+        public TSession Create() => Services.GetRequiredService<TSession>();
     }
 }

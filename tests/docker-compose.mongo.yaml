@@ -8,7 +8,7 @@ services:
   mongo1:
     container_name: mongo1
     build:
-      context: .
+      context: .mongo
       dockerfile: primary.Dockerfile
     ports:
       - 30001:30001

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TxCommand\TxCommand.csproj" />
+    <ProjectReference Include="..\..\src\TxCommand\TxCommand.csproj" />
   </ItemGroup>
 
 </Project>

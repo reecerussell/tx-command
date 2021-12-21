@@ -4,28 +4,24 @@
     <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
     <RootNamespace>TxCommand.Abstractions</RootNamespace>
     <Authors>Reece Russell</Authors>
-    <Description>Provides core interfaces for TxCommand.Mongo.</Description>
-    <Copyright>Reece Russell 2021</Copyright>
+    <Description>Provides abstractions for TxCommand.Sql, including ITxCommand, ISession and ISessionFactory.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
     <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>cqrs, tx, commanding, transaction, database, mongo, sql, nosql</PackageTags>
+    <PackageTags>cqrs, sql, mysql, tsql, commanding, query</PackageTags>
+    <Version>1.2.1</Version>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\TxCommand.Abstractions\TxCommand.Abstractions.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TxCommand.Abstractions\TxCommand.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

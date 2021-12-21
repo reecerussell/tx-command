@@ -7,5 +7,6 @@
 *coverage.cobertura.xml
 TestResults
 Coverage
+packages
 
 Mongo/data

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TxCommand.Sql\TxCommand.Sql.csproj" />
+    <ProjectReference Include="..\..\src\TxCommand.Sql\TxCommand.Sql.csproj" />
   </ItemGroup>
 
 </Project>

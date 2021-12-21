@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TxCommand.Sql.Abstractions\TxCommand.Sql.Abstractions.csproj" />
-    <ProjectReference Include="..\..\TxCommand\TxCommand.csproj" />
+    <ProjectReference Include="..\TxCommand\TxCommand.csproj" />
   </ItemGroup>
 
   <ItemGroup>

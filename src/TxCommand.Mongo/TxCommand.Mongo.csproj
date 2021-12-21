@@ -2,19 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
-    <RootNamespace>TxCommand.Abstractions</RootNamespace>
+    <RootNamespace>TxCommand</RootNamespace>
     <Authors>Reece Russell</Authors>
-    <Description>Provides abstractions for TxCommand.Sql, including ITxCommand, ISession and ISessionFactory.</Description>
+    <Description>An implementation of TxCommand to provide transactional commanding interfaces for MongoDB.</Description>
+    <Copyright>Reece Russell 2021</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
     <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>cqrs, sql, mysql, tsql, commanding, query</PackageTags>
-    <Version>1.2.1</Version>
+    <PackageTags>cqrs, commanding, tx, transactional, sql, mongo, nosql</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TxCommand.Abstractions\TxCommand.Abstractions.csproj" />
+    <ProjectReference Include="..\TxCommand.Mongo.Abstractions\TxCommand.Mongo.Abstractions.csproj" />
+    <ProjectReference Include="..\TxCommand\TxCommand.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,8 +35,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddTransient(_ => new MySqlConnection("<connection string>"));
 
     // Configure TxCommand and the Sql package.
-    services.AddTxCommand()
-        .AddSql();
+    services.AddTxCommand(o => o.AddSql());
 }
 ```
 

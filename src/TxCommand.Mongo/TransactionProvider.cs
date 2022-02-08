@@ -21,7 +21,7 @@ namespace TxCommand
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task EnsureTransactionAsync(CancellationToken cancellationToken)
+        public virtual async Task EnsureTransactionAsync(CancellationToken cancellationToken)
         {
             if (_disposed)
             {
@@ -39,7 +39,7 @@ namespace TxCommand
             }
         }
 
-        public Task CommitAsync(CancellationToken cancellationToken)
+        public virtual Task CommitAsync(CancellationToken cancellationToken)
         {
             if (_disposed)
             {
@@ -54,7 +54,7 @@ namespace TxCommand
             return _session.CommitTransactionAsync(cancellationToken);
         }
 
-        public void Commit()
+        public virtual void Commit()
         {
             if (_disposed)
             {
@@ -69,7 +69,7 @@ namespace TxCommand
             _session.CommitTransaction();
         }
 
-        public Task RollbackAsync(CancellationToken cancellationToken)
+        public virtual Task RollbackAsync(CancellationToken cancellationToken)
         {
             if (_disposed)
             {
@@ -84,7 +84,7 @@ namespace TxCommand
             return _session.AbortTransactionAsync(cancellationToken);
         }
 
-        public (IMongoClient database, IClientSessionHandle transaction) GetExecutionArguments()
+        public virtual (IMongoClient database, IClientSessionHandle transaction) GetExecutionArguments()
         {
             if (_disposed)
             {
@@ -94,7 +94,7 @@ namespace TxCommand
             return (_client, _session);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_disposed)
             {

@@ -26,7 +26,7 @@ namespace TxCommand
             _provider = provider;
         }
 
-        public async Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command)
+        public virtual async Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command)
         {
             if (_disposed)
             {
@@ -59,7 +59,7 @@ namespace TxCommand
             }
         }
 
-        public async Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command)
+        public virtual async Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command)
         {
             if (_disposed)
             {
@@ -94,7 +94,7 @@ namespace TxCommand
             }
         }
 
-        public async Task CommitAsync()
+        public virtual async Task CommitAsync()
         {
             if (_disposed)
             {
@@ -112,7 +112,7 @@ namespace TxCommand
             OnCommitted?.Invoke();
         }
 
-        public void Commit()
+        public virtual void Commit()
         {
             if (_disposed)
             {
@@ -130,7 +130,7 @@ namespace TxCommand
             OnCommitted?.Invoke();
         }
 
-        public async Task RollbackAsync()
+        public virtual async Task RollbackAsync()
         {
             if (_disposed)
             {
@@ -148,7 +148,7 @@ namespace TxCommand
             OnRolledBack?.Invoke();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_disposed)
             {
@@ -168,7 +168,7 @@ namespace TxCommand
 
 #if NET5_0
 
-        public async ValueTask DisposeAsync()
+        public virtual async ValueTask DisposeAsync()
         {
             if (_disposed)
             {

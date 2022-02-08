@@ -14,6 +14,6 @@ namespace TxCommand
             Services = services;
         }
 
-        public TSession Create() => Services.GetRequiredService<TSession>();
+        public virtual TSession Create() => Services.GetRequiredService<TSession>();
     }
 }

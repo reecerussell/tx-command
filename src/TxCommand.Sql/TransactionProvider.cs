@@ -21,7 +21,7 @@ namespace TxCommand
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public Task EnsureTransactionAsync(CancellationToken cancellationToken)
+        public virtual Task EnsureTransactionAsync(CancellationToken cancellationToken)
         {
             if (_disposed)
             {
@@ -41,7 +41,7 @@ namespace TxCommand
             return Task.CompletedTask;
         }
 
-        public Task CommitAsync(CancellationToken cancellationToken)
+        public virtual Task CommitAsync(CancellationToken cancellationToken)
         {
             if (_disposed)
             {
@@ -53,7 +53,7 @@ namespace TxCommand
             return Task.CompletedTask;
         }
 
-        public void Commit()
+        public virtual void Commit()
         {
             if (_disposed)
             {
@@ -63,7 +63,7 @@ namespace TxCommand
             _transaction.Commit();
         }
 
-        public Task RollbackAsync(CancellationToken cancellationToken)
+        public virtual Task RollbackAsync(CancellationToken cancellationToken)
         {
             if (_disposed)
             {
@@ -75,7 +75,7 @@ namespace TxCommand
             return Task.CompletedTask;
         }
 
-        public (IDbConnection database, IDbTransaction transaction) GetExecutionArguments()
+        public virtual (IDbConnection database, IDbTransaction transaction) GetExecutionArguments()
         {
             if (_disposed)
             {
@@ -85,7 +85,7 @@ namespace TxCommand
             return (_connection, _transaction);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _transaction?.Dispose();
             _disposed = true;

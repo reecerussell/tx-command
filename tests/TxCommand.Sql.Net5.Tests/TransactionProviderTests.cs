@@ -70,6 +70,21 @@ namespace TxCommand.Sql.Tests
             
             database.Verify(x => x.BeginTransaction(), Times.Never);
         }
+        
+        [Fact]
+        public async Task EnsureTransactionAsync_WhereCancellationIsRequested_ThrowsOperationCancelledException()
+        {
+            var database = new Mock<IDbConnection>();
+            var provider = new TransactionProvider(database.Object, new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() => provider.EnsureTransactionAsync(token));
+            
+            database.Verify(x => x.BeginTransaction(), Times.Never);
+        }
 
         [Fact]
         public async Task CommitAsync_WhereTransactionIsActive_Commits()
@@ -97,6 +112,25 @@ namespace TxCommand.Sql.Tests
                 .SetValue(provider, true);
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() => provider.CommitAsync(CancellationToken.None));
+        }
+        
+        [Fact]
+        public async Task CommitAsync_WhereCancellationIsRequested_ThrowsOperationCancelledException()
+        {
+            var transaction = new Mock<IDbTransaction>();
+            transaction.Setup(x => x.Rollback()).Verifiable();
+
+            var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
+            provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .SetValue(provider, transaction.Object);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() => provider.CommitAsync(token));
+            
+            transaction.Verify(x => x.Commit(), Times.Never);
         }
 
         [Fact]
@@ -126,6 +160,25 @@ namespace TxCommand.Sql.Tests
 
             Assert.Throws<ObjectDisposedException>(() => provider.Commit());
         }
+        
+        [Fact]
+        public void Commit_WhereCancellationIsRequested_ThrowsOperationCancelledException()
+        {
+            var transaction = new Mock<IDbTransaction>();
+            transaction.Setup(x => x.Rollback()).Verifiable();
+
+            var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
+            provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .SetValue(provider, transaction.Object);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            Assert.Throws<OperationCanceledException>(() => provider.Commit(token));
+            
+            transaction.Verify(x => x.Commit(), Times.Never);
+        }
 
         [Fact]
         public async Task RollbackAsync_WhereTransactionIsActive_RollsBack()
@@ -153,6 +206,25 @@ namespace TxCommand.Sql.Tests
                 .SetValue(provider, true);
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() => provider.RollbackAsync(CancellationToken.None));
+        }
+        
+        [Fact]
+        public async Task RollbackAsync_WhereCancellationIsRequested_ThrowsOperationCancelledException()
+        {
+            var transaction = new Mock<IDbTransaction>();
+            transaction.Setup(x => x.Rollback()).Verifiable();
+
+            var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
+            provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .SetValue(provider, transaction.Object);
+            
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() => provider.RollbackAsync(token));
+            
+            transaction.Verify(x => x.Rollback(), Times.Never);
         }
 
         [Fact]

@@ -106,6 +106,19 @@ namespace TxCommand.Mongo.Net5.Tests
             await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 provider.EnsureTransactionAsync(CancellationToken.None));
         }
+        
+        [Fact]
+        public async Task EnsureTransactionAsync_WhereCancelled_Throws()
+        {
+            var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                provider.EnsureTransactionAsync(token));
+        }
 
         [Fact]
         public async Task CommitAsync_WhereSessionIsActive_Commits()
@@ -164,6 +177,19 @@ namespace TxCommand.Mongo.Net5.Tests
             await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 provider.CommitAsync(CancellationToken.None));
         }
+        
+        [Fact]
+        public async Task CommitAsync_WhereCancelled_Throws()
+        {
+            var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
+            
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                provider.CommitAsync(token));
+        }
 
         [Fact]
         public async Task RollbackAsync_WhereSessionIsActive_Aborts()
@@ -221,6 +247,19 @@ namespace TxCommand.Mongo.Net5.Tests
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 provider.RollbackAsync(CancellationToken.None));
+        }
+        
+        [Fact]
+        public async Task RollbackAsync_WhereCancelled_Throws()
+        {
+            var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
+            
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                provider.RollbackAsync(token));
         }
 
         [Fact]

@@ -57,7 +57,7 @@ namespace TxCommand.Tests
             callbackCalled.Should().BeTrue();
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Never);
 
@@ -90,7 +90,7 @@ namespace TxCommand.Tests
             }
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -130,7 +130,7 @@ namespace TxCommand.Tests
             }
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -160,6 +160,20 @@ namespace TxCommand.Tests
 
             var command = Mock.Of<ITxCommand<ITestDatabase, ITestTransaction>>();
             await Assert.ThrowsAsync<ObjectDisposedException>(() => session.ExecuteAsync(command));
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_GivenCancelledToken_ThrowsOperationCanceledException()
+        {
+            var provider = Mock.Of<ITransactionProvider<ITestDatabase, ITestTransaction>>();
+            var session = new Session<ITestDatabase, ITestTransaction>(provider);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            var command = Mock.Of<ITxCommand<ITestDatabase, ITestTransaction>>();
+            await Assert.ThrowsAsync<OperationCanceledException>(() => session.ExecuteAsync(command, token));
         }
 
         #endregion
@@ -207,7 +221,7 @@ namespace TxCommand.Tests
             callbackCalled.Should().BeTrue();
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Never);
 
@@ -240,7 +254,7 @@ namespace TxCommand.Tests
             }
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -280,7 +294,7 @@ namespace TxCommand.Tests
             }
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -312,6 +326,20 @@ namespace TxCommand.Tests
             await Assert.ThrowsAsync<ObjectDisposedException>(() => session.ExecuteAsync(command));
         }
 
+        [Fact]
+        public async Task ExecuteAsync_GivenTxCommandTWithCancelledToken_ThrowsOperationCanceledException()
+        {
+            var provider = Mock.Of<ITransactionProvider<ITestDatabase, ITestTransaction>>();
+            var session = new Session<ITestDatabase, ITestTransaction>(provider);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            var command = Mock.Of<ITxCommand<ITestDatabase, ITestTransaction, string>>();
+            await Assert.ThrowsAsync<OperationCanceledException>(() => session.ExecuteAsync(command, token));
+        }
+        
         #endregion
 
         #region CommitAsync
@@ -370,6 +398,22 @@ namespace TxCommand.Tests
             provider.VerifyAll();
             provider.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
+        
+        [Fact]
+        public async Task CommitAsync_WhereCancellationIsRequest_ThrowsOperationCancelledException()
+        {
+            var provider = new Mock<ITransactionProvider<ITestDatabase, ITestTransaction>>();
+            var session = new Session<ITestDatabase, ITestTransaction>(provider.Object);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+            
+            await Assert.ThrowsAsync<OperationCanceledException>(() => session.CommitAsync(token));
+
+            provider.VerifyAll();
+            provider.Verify(x => x.CommitAsync(token), Times.Never);
+        }
 
         #endregion
 
@@ -379,7 +423,7 @@ namespace TxCommand.Tests
         public void Commit_WhereNotCompleted_CommitsProvider()
         {
             var provider = new Mock<ITransactionProvider<ITestDatabase, ITestTransaction>>();
-            provider.Setup(x => x.Commit())
+            provider.Setup(x => x.Commit(It.IsAny<CancellationToken>()))
                 .Verifiable();
 
             var session = new Session<ITestDatabase, ITestTransaction>(provider.Object);
@@ -395,7 +439,7 @@ namespace TxCommand.Tests
             callbackInvoked.Should().BeTrue();
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Once);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -411,7 +455,7 @@ namespace TxCommand.Tests
             Assert.Throws<TransactionNotStartedException>(() => session.Commit());
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -427,7 +471,23 @@ namespace TxCommand.Tests
             Assert.Throws<ObjectDisposedException>(() => session.Commit());
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
+        }
+        
+        [Fact]
+        public void Commit_WhereCancellationIsRequest_ThrowsOperationCancelledException()
+        {
+            var provider = new Mock<ITransactionProvider<ITestDatabase, ITestTransaction>>();
+            var session = new Session<ITestDatabase, ITestTransaction>(provider.Object);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+            
+            Assert.Throws<OperationCanceledException>(() => session.Commit(token));
+
+            provider.VerifyAll();
+            provider.Verify(x => x.Commit(token), Times.Never);
         }
 
         #endregion
@@ -488,6 +548,22 @@ namespace TxCommand.Tests
             provider.VerifyAll();
             provider.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
+        
+        [Fact]
+        public async Task RollbackAsync_WhereCancellationIsRequest_ThrowsOperationCancelledException()
+        {
+            var provider = new Mock<ITransactionProvider<ITestDatabase, ITestTransaction>>();
+            var session = new Session<ITestDatabase, ITestTransaction>(provider.Object);
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+            
+            await Assert.ThrowsAsync<OperationCanceledException>(() => session.RollbackAsync(token));
+
+            provider.VerifyAll();
+            provider.Verify(x => x.RollbackAsync(token), Times.Never);
+        }
 
         #endregion
 
@@ -497,7 +573,7 @@ namespace TxCommand.Tests
         public void Dispose_WhereNotAlreadyDisposed_Commits()
         {
             var provider = new Mock<ITransactionProvider<ITestDatabase, ITestTransaction>>();
-            provider.Setup(x => x.Commit())
+            provider.Setup(x => x.Commit(It.IsAny<CancellationToken>()))
                 .Verifiable();
 
             var session = new Session<ITestDatabase, ITestTransaction>(provider.Object);
@@ -510,7 +586,7 @@ namespace TxCommand.Tests
             session.Dispose();
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Once);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -528,7 +604,7 @@ namespace TxCommand.Tests
             session.Dispose();
 
             provider.VerifyAll();
-            provider.Verify(x => x.Commit(), Times.Never);
+            provider.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         #endregion

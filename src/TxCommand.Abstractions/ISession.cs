@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TxCommand.Abstractions
@@ -9,15 +10,16 @@ namespace TxCommand.Abstractions
         where TDatabase : class
         where TTransaction : class
     {
-        Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command);
+        Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command, CancellationToken cancellationToken = default);
 
-        Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command);
+        Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command,
+            CancellationToken cancellationToken = default);
 
-        Task CommitAsync();
+        Task CommitAsync(CancellationToken cancellationToken = default);
 
-        void Commit();
+        void Commit(CancellationToken cancellationToken = default);
 
-        Task RollbackAsync();
+        Task RollbackAsync(CancellationToken cancellationToken = default);
     }
 
 #endif
@@ -28,15 +30,16 @@ namespace TxCommand.Abstractions
         where TDatabase : class
         where TTransaction : class
     {
-        Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command);
+        Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command, CancellationToken cancellationToken = default);
 
-        Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command);
+        Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command,
+            CancellationToken cancellationToken = default);
 
-        Task CommitAsync();
+        Task CommitAsync(CancellationToken cancellationToken = default);
 
-        void Commit();
+        void Commit(CancellationToken cancellationToken = default);
 
-        Task RollbackAsync();
+        Task RollbackAsync(CancellationToken cancellationToken = default);
     }
 
 #endif

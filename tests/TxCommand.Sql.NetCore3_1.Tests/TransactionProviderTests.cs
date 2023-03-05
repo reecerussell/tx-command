@@ -217,8 +217,7 @@ namespace TxCommand.Sql.Tests
             var provider = new TransactionProvider(Mock.Of<IDbConnection>(), new SqlOptions { IsolationLevel = IsolationLevel.ReadUncommitted });
             provider.GetType().GetField("_transaction", BindingFlags.NonPublic | BindingFlags.Instance)?
                 .SetValue(provider, transaction.Object);
-
-
+            
             var ctx = new CancellationTokenSource();
             var token = ctx.Token;
             ctx.Cancel();

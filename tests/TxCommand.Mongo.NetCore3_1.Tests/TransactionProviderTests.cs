@@ -106,6 +106,19 @@ namespace TxCommand.Mongo.NetCore3_1.Tests
             await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 provider.EnsureTransactionAsync(CancellationToken.None));
         }
+        
+        [Fact]
+        public async Task EnsureTransactionAsync_WhereCancelled_Throws()
+        {
+            var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                provider.EnsureTransactionAsync(token));
+        }
 
         [Fact]
         public void Commit_WhereSessionIsActive_Commits()
@@ -162,6 +175,18 @@ namespace TxCommand.Mongo.NetCore3_1.Tests
                 .SetValue(provider, true);
 
             Assert.Throws<ObjectDisposedException>(() => provider.Commit());
+        }
+        
+        [Fact]
+        public void Commit_WhereCancelled_Throws()
+        {
+            var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
+
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            Assert.Throws<OperationCanceledException>(() => provider.Commit(token));
         }
 
         [Fact]
@@ -220,6 +245,19 @@ namespace TxCommand.Mongo.NetCore3_1.Tests
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 provider.RollbackAsync(CancellationToken.None));
+        }
+        
+        [Fact]
+        public async Task RollbackAsync_WhereCancelled_Throws()
+        {
+            var provider = new TransactionProvider(Mock.Of<IMongoClient>(), new MongoOptions());
+            
+            var ctx = new CancellationTokenSource();
+            var token = ctx.Token;
+            ctx.Cancel();
+
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                provider.RollbackAsync(token));
         }
 
         [Fact]

@@ -26,7 +26,7 @@ namespace TxCommand.Abstractions
         /// <summary>
         /// Commits the underlying database transaction.
         /// </summary>
-        void Commit();
+        void Commit(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Rolls back the underlying database transaction.

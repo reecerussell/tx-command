@@ -23,10 +23,8 @@ namespace TxCommand
 
         public virtual Task EnsureTransactionAsync(CancellationToken cancellationToken)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_connection.State == ConnectionState.Closed)
             {
@@ -43,32 +41,26 @@ namespace TxCommand
 
         public virtual Task CommitAsync(CancellationToken cancellationToken)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             _transaction.Commit();
 
             return Task.CompletedTask;
         }
 
-        public virtual void Commit()
+        public virtual void Commit(CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             _transaction.Commit();
         }
 
         public virtual Task RollbackAsync(CancellationToken cancellationToken)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             _transaction.Rollback();
 
@@ -77,10 +69,7 @@ namespace TxCommand
 
         public virtual (IDbConnection database, IDbTransaction transaction) GetExecutionArguments()
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
 
             return (_connection, _transaction);
         }
@@ -89,6 +78,22 @@ namespace TxCommand
         {
             _transaction?.Dispose();
             _disposed = true;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(TransactionProvider));
+            }
+        }
+        
+        private static void ThrowIfCancelled(CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException();
+            }
         }
     }
 }

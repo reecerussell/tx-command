@@ -23,10 +23,8 @@ namespace TxCommand
 
         public virtual async Task EnsureTransactionAsync(CancellationToken cancellationToken)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_session == null)
             {
@@ -41,10 +39,8 @@ namespace TxCommand
 
         public virtual Task CommitAsync(CancellationToken cancellationToken)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_session?.IsInTransaction != true)
             {
@@ -54,27 +50,23 @@ namespace TxCommand
             return _session.CommitTransactionAsync(cancellationToken);
         }
 
-        public virtual void Commit()
+        public virtual void Commit(CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_session?.IsInTransaction != true)
             {
                 throw new TransactionNotStartedException(nameof(Commit));
             }
 
-            _session.CommitTransaction();
+            _session.CommitTransaction(cancellationToken);
         }
 
         public virtual Task RollbackAsync(CancellationToken cancellationToken)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_session?.IsInTransaction != true)
             {
@@ -86,10 +78,7 @@ namespace TxCommand
 
         public virtual (IMongoClient database, IClientSessionHandle transaction) GetExecutionArguments()
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(TransactionProvider));
-            }
+            ThrowIfDisposed();
 
             return (_client, _session);
         }
@@ -103,6 +92,22 @@ namespace TxCommand
 
             _session?.Dispose();
             _disposed = true;
+        }
+        
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(TransactionProvider));
+            }
+        }
+        
+        private static void ThrowIfCancelled(CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException();
+            }
         }
     }
 }

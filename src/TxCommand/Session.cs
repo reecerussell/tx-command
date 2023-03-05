@@ -10,7 +10,6 @@ namespace TxCommand
         where TDatabase : class
         where TTransaction : class
     {
-        private readonly CancellationTokenSource _ctx;
         private readonly ITransactionProvider<TDatabase, TTransaction> _provider;
 
         private bool _completed = true;
@@ -22,24 +21,21 @@ namespace TxCommand
 
         public Session(ITransactionProvider<TDatabase, TTransaction> provider)
         {
-            _ctx = new CancellationTokenSource();
             _provider = provider;
         }
 
-        public virtual async Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command)
+        public virtual async Task ExecuteAsync(ITxCommand<TDatabase, TTransaction> command,
+            CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(Session<TDatabase, TTransaction>));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var token = _ctx.Token;
-            await _provider.EnsureTransactionAsync(token);
+            await _provider.EnsureTransactionAsync(cancellationToken);
             _completed = false;
 
             try
@@ -53,26 +49,24 @@ namespace TxCommand
             }
             catch (Exception)
             {
-                await RollbackAsync();
+                await RollbackAsync(cancellationToken);
 
                 throw;
             }
         }
 
-        public virtual async Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command)
+        public virtual async Task<TResult> ExecuteAsync<TResult>(ITxCommand<TDatabase, TTransaction, TResult> command,
+            CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(Session<TDatabase, TTransaction>));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var token = _ctx.Token;
-            await _provider.EnsureTransactionAsync(token);
+            await _provider.EnsureTransactionAsync(cancellationToken);
             _completed = false;
 
             try
@@ -88,61 +82,55 @@ namespace TxCommand
             }
             catch (Exception)
             {
-                await RollbackAsync();
+                await RollbackAsync(cancellationToken);
 
                 throw;
             }
         }
 
-        public virtual async Task CommitAsync()
+        public virtual async Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(Session<TDatabase, TTransaction>));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_completed)
             {
                 throw new TransactionNotStartedException(nameof(CommitAsync));
             }
 
-            await _provider.CommitAsync(_ctx.Token);
+            await _provider.CommitAsync(cancellationToken);
             _completed = true;
 
             OnCommitted?.Invoke();
         }
 
-        public virtual void Commit()
+        public virtual void Commit(CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(Session<TDatabase, TTransaction>));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_completed)
             {
                 throw new TransactionNotStartedException(nameof(Commit));
             }
 
-            _provider.Commit();
+            _provider.Commit(cancellationToken);
             _completed = true;
 
             OnCommitted?.Invoke();
         }
 
-        public virtual async Task RollbackAsync()
+        public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(Session<TDatabase, TTransaction>));
-            }
+            ThrowIfDisposed();
+            ThrowIfCancelled(cancellationToken);
 
             if (_completed)
             {
                 throw new TransactionNotStartedException(nameof(CommitAsync));
             }
 
-            await _provider.RollbackAsync(_ctx.Token);
+            await _provider.RollbackAsync(cancellationToken);
             _completed = true;
 
             OnRolledBack?.Invoke();
@@ -159,9 +147,6 @@ namespace TxCommand
             {
                 Commit();
             }
-
-            _ctx.Cancel();
-            _ctx.Dispose();
 
             _disposed = true;
         }
@@ -180,12 +165,25 @@ namespace TxCommand
                 await CommitAsync();
             }
 
-            _ctx.Cancel();
-            _ctx.Dispose();
-
             _disposed = true;
         }
 
 #endif
+        
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(Session<TDatabase, TTransaction>));
+            }
+        }
+        
+        private static void ThrowIfCancelled(CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException();
+            }
+        }
     }
 }

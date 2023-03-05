@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/reecerussell/tx-command</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>cqrs, commanding, tx, transactional, sql, mongo, nosql</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

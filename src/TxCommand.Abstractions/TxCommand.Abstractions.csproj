@@ -10,7 +10,7 @@
     <PackageTags>CQRS, commanding, sql, transaction</PackageTags>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reecerussell/tx-command</PackageProjectUrl>
     <PackageReleaseNotes>A major rewrite of internals and key interfaces. ITxCommandExecutor has been replaced with ISession.</PackageReleaseNotes>
